@@ -11,6 +11,40 @@ python -m flask --version
 ```
 pip install Flask-SQLAlchemy
 ```
+# 파일 전체 흐름
+```
+myweb/
+├── app.py
+├── .env
+├── templates/
+│   ├── index.html
+│   ├── bulletin_board.html
+│   ├── edit_post.html
+│   ├── login.html
+│   ├── new_bulletin_post.html
+│   ├── new_post.html
+│   ├── register.html
+│   ├── view.html
+│   ├── view_bulletin_post.html
+│   ├── building/
+│   │   ├── B01.html
+│   │   ├── B26.html
+│   │   └── B27.html
+│   └── board.html
+├── static/            # 정적 파일
+│   ├── buildingC/
+│   │   └── B01.css
+│   ├── images/
+│   │   └── ...
+│   ├── board.css
+│   ├── bulletin_board.css
+│   ├── image_slider.css
+│   ├── image_slider.js
+│   ├── style.css
+│   └── view.css
+└── instance/          # 데이터베이스 파일 (database.db)
+    └── database.db 
+```
 
 # templates 
 - board.html
