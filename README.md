@@ -85,6 +85,547 @@ myweb/
 - `instance` 폴더에는 SQLite 데이터베이스 파일이 저장됩니다.
 - `.env` 파일은 민감한 API 키와 같은 환경 변수를 안전하게 관리하는 데 사용됩니다.
 
+# static 
+
+### board.css 
+```
+/*
+    이 CSS 파일은 웹사이트의 게시판 관련 요소들의 시각적인 스타일을 정의합니다.
+    게시글 목록, 개별 게시글 상세 페이지, 그리고 특히 **댓글 섹션**과 **댓글 작성 폼**에 대한 디자인을 담당합니다.
+    각 CSS 규칙은 특정 HTML 요소나 클래스에 어떤 스타일을 적용할지 명확하게 설명합니다.
+*/
+
+/* comments-section 전체에 대한 스타일 */
+.comments-section {
+    margin-top: 20px; /* 상단에 20픽셀의 외부 여백을 설정하여 다른 요소와 분리합니다. */
+    padding: 15px; /* 내부적으로 15픽셀의 여백(패딩)을 추가합니다. */
+    border: 1px solid #e0e0e0; /* 1픽셀 두께의 연한 회색 실선 테두리를 추가합니다. */
+    border-radius: 8px; /* 테두리 모서리를 8픽셀 둥글게 만들어 부드러운 느낌을 줍니다. */
+    background-color: #f9f9f9; /* 섹션의 배경색을 아주 연한 회색으로 설정하여 가시성을 높입니다. */
+}
+
+/* 댓글 섹션 제목 (<h2>) 스타일 */
+.comments-section h2 {
+    font-size: 1.5em; /* 기본 글꼴 크기의 1.5배로 설정하여 제목임을 강조합니다. */
+    color: #333; /* 글자색을 진한 회색(#333)으로 설정합니다. */
+    margin-bottom: 15px; /* 제목 아래에 15픽셀의 외부 여백을 설정합니다. */
+    border-bottom: 2px solid #eee; /* 2픽셀 두께의 아주 연한 회색 실선 하단 테두리를 추가합니다. */
+    padding-bottom: 10px; /* 하단 테두리 위에 10픽셀의 내부 여백을 주어 텍스트와 테두리 사이의 공간을 확보합니다. */
+}
+
+/* 댓글 목록 (<ul>) 스타일 */
+.comments-section ul {
+    list-style: none; /* 목록 항목의 기본 마커(예: 불릿 기호)를 제거합니다. */
+    padding: 0; /* 목록의 내부 여백(패딩)을 제거합니다. */
+    margin: 0; /* 목록의 외부 여백(마진)을 제거합니다. */
+}
+
+/* 개별 댓글 (<li>) 스타일 */
+.comments-section ul li {
+    background-color: #fff; /* 개별 댓글 항목의 배경색을 흰색으로 설정합니다. */
+    border: 1px solid #ddd; /* 1픽셀 두께의 연한 회색 실선 테두리를 추가합니다. */
+    border-radius: 5px; /* 테두리 모서리를 5픽셀 둥글게 만듭니다. */
+    padding: 10px 15px; /* 상하 10픽셀, 좌우 15픽셀의 내부 여백을 설정합니다. */
+    margin-bottom: 10px; /* 각 댓글 항목 사이에 10픽셀의 하단 외부 여백을 추가합니다. */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* 약간의 그림자 효과를 추가하여 입체감을 줍니다. (가로 0, 세로 2, 블러 4, 색상 투명도 5%) */
+}
+
+/* 마지막 댓글 항목 (<li>)에 대한 특별 스타일 */
+.comments-section ul li:last-child {
+    margin-bottom: 0; /* 목록의 마지막 댓글 항목에는 하단 여백을 제거하여 깔끔하게 마무리합니다. */
+}
+
+/* 댓글 작성자 이름 (<strong>) 스타일 */
+.comments-section ul li strong {
+    color: #007bff; /* 작성자 이름을 밝은 파란색(#007bff)으로 강조합니다. */
+    font-weight: bold; /* 글꼴 두께를 굵게 설정합니다. */
+}
+
+/* 댓글 작성일자 (<small>) 스타일 */
+.comments-section ul li small {
+    color: #888; /* 작성일자 글자색을 회색(#888)으로 설정합니다. */
+    font-size: 0.85em; /* 글꼴 크기를 기본 글꼴 크기의 85%로 줄여서 보조적인 정보임을 나타냅니다. */
+    margin-left: 10px; /* 작성자 이름으로부터 10픽셀의 왼쪽 외부 여백을 줍니다. */
+}
+
+/* 댓글 내용 (주로 <p> 태그 안에 있을 것으로 예상) 스타일 */
+/*
+    주의: 이 선택자는 ".comments-section ul li"만으로 지정되어 있어서,
+    해당 `<li>` 요소 자체의 스타일이거나, `<li>` 안에 직접 텍스트가 있을 경우 적용됩니다.
+    만약 댓글 내용이 `<p>` 태그 내에 있다면 `.comments-section ul li p`로
+    선택자를 더 명확히 지정하는 것이 좋습니다.
+*/
+.comments-section ul li {
+    line-height: 1.6; /* 줄 간격을 1.6배로 설정하여 가독성을 높입니다. */
+    color: #555; /* 글자색을 중간 회색(#555)으로 설정합니다. */
+    white-space: pre-wrap; /* 공백 문자와 줄 바꿈을 HTML에 작성된 그대로 유지하면서, 필요한 경우 줄 바꿈을 허용합니다. (예: 여러 줄의 텍스트) */
+    word-wrap: break-word; /* 긴 단어가 컨테이너를 벗어나는 경우 단어를 끊어서 줄 바꿈합니다. */
+}
+
+/* 댓글이 없을 때의 메시지 (<p> 또는 특정 클래스) 스타일 */
+/*
+    주의: 이 선택자는 `.comments-section p`로, 댓글 목록 외의 다른 `<p>` 태그에도
+    영향을 줄 수 있습니다. 만약 댓글이 없을 때의 메시지에만 적용하려면
+    `.comments-section .no-comments-message`와 같이 특정 클래스를 사용하는 것이 더 명확합니다.
+*/
+.comments-section p {
+    color: #777; /* 글자색을 회색(#777)으로 설정합니다. */
+    text-align: center; /* 텍스트를 중앙 정렬합니다. */
+    padding: 20px; /* 내부 여백(패딩)을 20픽셀로 설정합니다. */
+    background-color: #f0f0f0; /* 배경색을 연한 회색(#f0f0f0)으로 설정합니다. */
+    border-radius: 5px; /* 모서리를 5픽셀 둥글게 만듭니다. */
+}
+
+/* 댓글 작성 폼 (comment-form) 스타일 */
+.comment-form {
+    margin-top: 30px; /* 상단에 30픽셀의 외부 여백을 설정하여 댓글 목록과 명확히 구분합니다. */
+    padding: 20px; /* 내부적으로 20픽셀의 여백(패딩)을 추가합니다. */
+    border: 1px solid #e0e0e0; /* 1픽셀 두께의 연한 회색 실선 테두리를 추가합니다. */
+    border-radius: 8px; /* 테두리 모서리를 8픽셀 둥글게 만듭니다. */
+    background-color: #f9f9f9; /* 배경색을 아주 연한 회색으로 설정합니다. */
+}
+
+/* 댓글 작성 폼 제목 (<h3>) 스타일 */
+.comment-form h3 {
+    font-size: 1.3em; /* 기본 글꼴 크기의 1.3배로 설정하여 제목임을 나타냅니다. */
+    color: #333; /* 글자색을 진한 회색(#333)으로 설정합니다. */
+    margin-bottom: 15px; /* 제목 아래에 15픽셀의 외부 여백을 설정합니다. */
+}
+
+/* 댓글 입력란 (<textarea>) 스타일 */
+.comment-form textarea {
+    width: 100%; /* 부모 요소의 전체 너비를 차지하도록 설정합니다. */
+    padding: 10px; /* 내부적으로 10픽셀의 여백(패딩)을 추가합니다. */
+    border: 1px solid #ccc; /* 1픽셀 두께의 연한 회색 실선 테두리를 추가합니다. */
+    border-radius: 5px; /* 테두리 모서리를 5픽셀 둥글게 만듭니다. */
+    box-sizing: border-box; /* 패딩과 테두리가 요소의 전체 너비에 포함되도록 계산 방식을 변경합니다. (레이아웃 계산을 편리하게 함) */
+    margin-bottom: 10px; /* 입력란 아래에 10픽셀의 외부 여백을 설정합니다. */
+    resize: vertical; /* 사용자가 세로 방향으로만 입력란의 크기를 조절할 수 있도록 허용합니다. */
+    min-height: 80px; /* 입력란의 최소 높이를 80픽셀로 설정합니다. */
+}
+
+/* 댓글 제출 버튼 (<button>) 스타일 */
+.comment-form button {
+    background-color: #007bff; /* 버튼의 배경색을 밝은 파란색(#007bff)으로 설정합니다. */
+    color: white; /* 버튼의 글자색을 흰색으로 설정합니다. */
+    padding: 10px 20px; /* 상하 10픽셀, 좌우 20픽셀의 내부 여백을 설정합니다. */
+    border: none; /* 버튼의 테두리를 제거합니다. */
+    border-radius: 5px; /* 테두리 모서리를 5픽셀 둥글게 만듭니다. */
+    cursor: pointer; /* 마우스 커서를 포인터 모양으로 변경하여 클릭 가능함을 나타냅니다. */
+    font-size: 1em; /* 글꼴 크기를 기본 글꼴 크기와 동일하게 설정합니다. */
+    transition: background-color 0.3s ease; /* 배경색 변경 시 0.3초 동안 부드러운 전환 효과를 적용하여 사용자 경험을 향상시킵니다. */
+}
+
+/* 버튼에 마우스 오버 시 (hover) 스타일 */
+.comment-form button:hover {
+    background-color: #0056b3; /* 마우스 커서가 버튼 위에 올라갔을 때 배경색을 더 진한 파란색(#0056b3)으로 변경합니다. */
+}
+```
+
+### bulletin_board.css 
+```
+/*
+    bulletin_board.css 파일은 웹사이트의 게시판 관련 페이지들(게시글 목록, 새 글 쓰기, 게시글 상세 보기)의
+    전반적인 시각적 스타일을 정의합니다.
+    여기에는 공통적인 컨테이너 스타일부터 테이블 레이아웃, 버튼 디자인, 폼 요소,
+    그리고 댓글 섹션에 이르기까지 다양한 요소에 대한 스타일 규칙이 포함됩니다.
+*/
+
+/* --- 게시판 전체 목록 스타일 (bulletin_board.html) --- */
+
+/* '.container' 클래스는 게시판 페이지의 주요 콘텐츠를 감싸는 컨테이너의 스타일을 정의합니다.
+   게시글 목록, 새 글 쓰기 폼, 게시글 상세 페이지 등 여러 페이지에서 공통적으로 사용될 수 있습니다. */
+.container {
+    max-width: 800px; /* 컨테이너의 최대 너비를 800픽셀로 제한하여 너무 넓게 퍼지는 것을 방지합니다. */
+    margin: 20px auto; /* 상하로 20픽셀의 외부 여백을 주고, 좌우는 'auto'로 설정하여 컨테이너를 페이지 중앙에 배치합니다. */
+    padding: 20px; /* 컨테이너 내부적으로 20픽셀의 여백(패딩)을 추가합니다. */
+    background-color: #fff; /* 컨테이너의 배경색을 흰색으로 설정합니다. */
+    border: 1px solid #ddd; /* 1픽셀 두께의 연한 회색 실선 테두리를 추가합니다. */
+    border-radius: 5px; /* 테두리 모서리를 5픽셀 둥글게 만들어 부드러운 느낌을 줍니다. */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 약간의 그림자 효과를 추가하여 컨테이너에 입체감을 줍니다.
+                                                  (가로 오프셋 0, 세로 오프셋 2, 블러 반경 5, 색상 투명도 10%) */
+}
+
+/* '.container' 내부의 <h1> 태그 (페이지 제목) 스타일 */
+.container h1 {
+    color: #007bff; /* 제목의 글자색을 밝은 파란색(#007bff)으로 설정합니다. */
+    margin-bottom: 20px; /* 제목 아래에 20픽셀의 외부 여백을 설정합니다. */
+    text-align: center; /* 텍스트를 중앙 정렬합니다. */
+}
+
+/* '.container' 내부의 <table> 태그 (게시글 목록 테이블) 스타일 */
+.container table {
+    width: 100%; /* 테이블 너비를 부모 요소(컨테이너)에 꽉 채우도록 설정합니다. */
+    border-collapse: collapse; /* 테이블 셀 사이의 경계를 단일 선으로 병합하여 깔끔하게 만듭니다. */
+    margin-bottom: 20px; /* 테이블 아래에 20픽셀의 외부 여백을 설정합니다. */
+}
+
+/* '.container' 내부의 <th> (테이블 헤더)와 <td> (테이블 데이터) 셀 스타일 */
+.container th, .container td {
+    border-bottom: 1px solid #eee; /* 각 셀의 하단에 1픽셀 두께의 아주 연한 회색 실선 테두리를 추가하여 행을 구분합니다. */
+    padding: 10px; /* 셀 내부적으로 10픽셀의 여백(패딩)을 추가합니다. */
+    text-align: left; /* 셀 안의 텍스트를 왼쪽 정렬합니다. */
+}
+
+/* '.container' 내부의 <th> (테이블 헤더) 셀에 대한 추가 스타일 */
+.container th {
+    background-color: #f8f9fa; /* 테이블 헤더의 배경색을 매우 연한 회색으로 설정합니다. */
+    font-weight: bold; /* 헤더 텍스트의 글꼴 두께를 굵게 설정합니다. */
+}
+
+/* '.container' 내부의 <tbody> (테이블 본문) 내 각 행 (<tr>)에 마우스 오버 시 스타일 */
+.container tbody tr:hover {
+    background-color: #f5f5f5; /* 마우스 커서가 행 위에 올라갔을 때 배경색을 연한 회색으로 변경하여 선택 효과를 줍니다. */
+}
+
+/* '.container' 내부의 <tbody> (테이블 본문) 내 <td> (테이블 데이터) 안의 <a> 태그 (게시글 제목 링크) 스타일 */
+.container tbody td a {
+    text-decoration: none; /* 링크의 밑줄을 제거합니다. */
+    color: #333; /* 링크의 글자색을 진한 회색(#333)으로 설정합니다. */
+}
+
+/* '.container' 내부의 <tbody> 내 <td> 안의 <a> 태그에 마우스 오버 시 스타일 */
+.container tbody td a:hover {
+    color: #007bff; /* 마우스 오버 시 링크의 글자색을 밝은 파란색(#007bff)으로 변경합니다. */
+    text-decoration: underline; /* 마우스 오버 시 링크에 밑줄을 다시 추가합니다. */
+}
+
+/* '.container' 내부의 '.button' 클래스 (버튼 공통 스타일) */
+.container .button {
+    display: inline-block; /* 요소를 인라인-블록 레벨로 표시하여 가로로 나열되면서 너비/높이 설정이 가능하게 합니다. */
+    padding: 10px 15px; /* 상하 10픽셀, 좌우 15픽셀의 내부 여백을 설정합니다. */
+    background-color: #007bff; /* 버튼의 배경색을 밝은 파란색(#007bff)으로 설정합니다. */
+    color: white; /* 버튼의 글자색을 흰색으로 설정합니다. */
+    border: none; /* 버튼의 테두리를 제거합니다. */
+    border-radius: 5px; /* 테두리 모서리를 5픽셀 둥글게 만듭니다. */
+    text-decoration: none; /* 링크의 밑줄을 제거합니다 (버튼이 <a> 태그일 경우). */
+    cursor: pointer; /* 마우스 커서를 포인터 모양으로 변경하여 클릭 가능함을 나타냅니다. */
+    margin-right: 10px; /* 오른쪽에 10픽셀의 외부 여백을 주어 다른 버튼과 분리합니다. */
+}
+
+/* '.container' 내부의 '.button' 클래스에 마우스 오버 시 스타일 */
+.container .button:hover {
+    background-color: #0056b3; /* 마우스 오버 시 배경색을 더 진한 파란색(#0056b3)으로 변경합니다. */
+}
+
+/* '.container' 내부의 일반적인 <a> 태그 (기타 링크) 스타일 */
+.container a {
+    color: #007bff; /* 링크의 글자색을 밝은 파란색(#007bff)으로 설정합니다. */
+    text-decoration: none; /* 링크의 밑줄을 제거합니다. */
+}
+
+/* '.container' 내부의 일반적인 <a> 태그에 마우스 오버 시 스타일 */
+.container a:hover {
+    text-decoration: underline; /* 마우스 오버 시 링크에 밑줄을 추가합니다. */
+}
+
+/* --- 새 글 쓰기 폼 스타일 (new_bulletin_post.html) --- */
+
+/* '.container' 내부의 <form> 태그 안의 <label> 태그 (폼 필드 라벨) 스타일 */
+.container form label {
+    display: block; /* 라벨을 블록 레벨 요소로 만들어 다음 요소가 새 줄에서 시작하도록 합니다. */
+    margin-bottom: 5px; /* 라벨 아래에 5픽셀의 외부 여백을 설정합니다. */
+    font-weight: bold; /* 글꼴 두께를 굵게 설정합니다. */
+    color: #555; /* 글자색을 중간 회색(#555)으로 설정합니다. */
+}
+
+/* '.container' 내부의 <form> 태그 안의 텍스트 입력 필드 (<input type="text">)와 텍스트 영역 (<textarea>) 스타일 */
+.container form input[type="text"],
+.container form textarea {
+    width: 100%; /* 너비를 부모 요소에 꽉 채우도록 설정합니다. */
+    padding: 10px; /* 내부적으로 10픽셀의 여백(패딩)을 추가합니다. */
+    margin-bottom: 15px; /* 아래에 15픽셀의 외부 여백을 설정합니다. */
+    border: 1px solid #ccc; /* 1픽셀 두께의 연한 회색 실선 테두리를 추가합니다. */
+    border-radius: 4px; /* 테두리 모서리를 4픽셀 둥글게 만듭니다. */
+    box-sizing: border-box; /* 패딩과 테두리가 요소의 전체 너비에 포함되도록 계산 방식을 변경합니다. */
+    font-size: 1em; /* 글꼴 크기를 기본 글꼴 크기와 동일하게 설정합니다. */
+}
+
+/* '.container' 내부의 <form> 태그 안의 <textarea> (텍스트 영역)에 대한 추가 스타일 */
+.container form textarea {
+    resize: vertical; /* 사용자가 세로 방향으로만 텍스트 영역의 크기를 조절할 수 있도록 허용합니다. */
+    min-height: 150px; /* 텍스트 영역의 최소 높이를 150픽셀로 설정합니다. */
+}
+
+/* '.container' 내부의 <form> 태그 안의 제출 버튼 (<input type="submit">) 스타일 */
+.container form input[type="submit"] {
+    background-color: #28a745; /* 버튼의 배경색을 녹색(#28a745)으로 설정합니다. */
+    color: white; /* 버튼의 글자색을 흰색으로 설정합니다. */
+    padding: 10px 15px; /* 상하 10픽셀, 좌우 15픽셀의 내부 여백을 설정합니다. */
+    border: none; /* 버튼의 테두리를 제거합니다. */
+    border-radius: 5px; /* 테두리 모서리를 5픽셀 둥글게 만듭니다. */
+    cursor: pointer; /* 마우스 커서를 포인터 모양으로 변경하여 클릭 가능함을 나타냅니다. */
+    font-size: 1em; /* 글꼴 크기를 기본 글꼴 크기와 동일하게 설정합니다. */
+}
+
+/* '.container' 내부의 <form> 태그 안의 제출 버튼에 마우스 오버 시 스타일 */
+.container form input[type="submit"]:hover {
+    background-color: #218838; /* 마우스 오버 시 배경색을 더 진한 녹색(#218838)으로 변경합니다. */
+}
+
+/* --- 게시글 상세 페이지 스타일 (view_bulletin_post.html) --- */
+
+/* '.container' 내부의 '.content' 클래스 (게시글 본문 내용) 스타일 */
+.container .content {
+    padding: 15px 0; /* 상하 15픽셀, 좌우 0픽셀의 내부 여백을 설정합니다. */
+    border-top: 1px solid #eee; /* 상단에 1픽셀 두께의 아주 연한 회색 실선 테두리를 추가합니다. */
+    border-bottom: 1px solid #eee; /* 하단에 1픽셀 두께의 아주 연한 회색 실선 테두리를 추가합니다. */
+    margin-bottom: 20px; /* 본문 내용 아래에 20픽셀의 외부 여백을 설정합니다. */
+    line-height: 1.6; /* 줄 간격을 1.6배로 설정하여 가독성을 높입니다. */
+}
+
+/* '.container' 내부의 '.content' 클래스 안의 <p> 태그 (게시글 단락) 스타일 */
+.container .content p {
+    margin-bottom: 10px; /* 각 단락 아래에 10픽셀의 외부 여백을 설정합니다. */
+}
+
+/* '.container' 내부의 '.date' 클래스 (게시글 작성일자) 스타일 */
+.container .date {
+    color: #777; /* 글자색을 회색(#777)으로 설정합니다. */
+    font-size: 0.9em; /* 글꼴 크기를 기본 글꼴 크기의 90%로 줄여서 보조적인 정보임을 나타냅니다. */
+    margin-bottom: 10px; /* 날짜 아래에 10픽셀의 외부 여백을 설정합니다. */
+}
+
+/* --- 댓글 섹션 (게시글 상세 페이지의 댓글 영역) --- */
+
+/* '.comment-section' 클래스 (전체 댓글 섹션 컨테이너) 스타일 */
+.comment-section {
+    margin-top: 40px; /* 상단에 40픽셀의 외부 여백을 설정하여 게시글 본문과 충분히 구분합니다. */
+    padding: 20px; /* 내부적으로 20픽셀의 여백(패딩)을 추가합니다. */
+    background-color: #ffffff; /* 배경색을 흰색으로 설정합니다. */
+    border: 1px solid #a8c7e7; /* 1픽셀 두께의 연한 파란색 계열 실선 테두리를 추가합니다. */
+    border-radius: 5px; /* 테두리 모서리를 5픽셀 둥글게 만듭니다. */
+}
+
+/* '.comment-section' 내부의 <h2> 태그 (댓글 섹션 제목) 스타일 */
+.comment-section h2 {
+    color: #004080; /* 제목의 글자색을 진한 파란색(#004080)으로 설정합니다. */
+    margin-bottom: 15px; /* 제목 아래에 15픽셀의 외부 여백을 설정합니다. */
+    border-bottom: 2px solid #a8c7e7; /* 2픽셀 두께의 연한 파란색 계열 실선 하단 테두리를 추가합니다. */
+    padding-bottom: 5px; /* 하단 테두리 위에 5픽셀의 내부 여백을 주어 텍스트와 테두리 사이 공간을 확보합니다. */
+}
+
+/* '.comments' 클래스 (댓글 목록을 감싸는 요소) 내부의 '.comment' 클래스 (개별 댓글 항목) 스타일 */
+.comments .comment {
+    margin-bottom: 15px; /* 각 댓글 항목 아래에 15픽셀의 외부 여백을 설정합니다. */
+    padding-bottom: 10px; /* 내부적으로 하단에 10픽셀의 여백(패딩)을 추가합니다. */
+    border-bottom: 1px solid #d0dbe8; /* 하단에 1픽셀 두께의 연한 파란색 계열 실선 테두리를 추가하여 각 댓글을 구분합니다. */
+}
+
+/* '.comment' 클래스 내부의 <textarea> 태그 (댓글 입력란) 스타일 */
+.comment textarea {
+    width: 100%; /* 너비를 부모 요소에 꽉 채우도록 설정합니다. */
+    padding: 10px; /* 내부적으로 10픽셀의 여백(패딩)을 추가합니다. */
+    border: 1px solid #a8c7e7; /* 1픽셀 두께의 연한 파란색 계열 실선 테두리를 추가합니다. */
+    border-radius: 3px; /* 테두리 모서리를 3픽셀 둥글게 만듭니다. */
+    background-color: #f0f4f8; /* 배경색을 아주 연한 파란색(#f0f4f8)으로 설정하여 입력 가능한 영역임을 시각적으로 나타냅니다. */
+    resize: vertical; /* 사용자가 세로 방향으로만 크기를 조절할 수 있도록 허용합니다. */
+    margin-bottom: 10px; /* 입력란 아래에 10픽셀의 외부 여백을 설정합니다. */
+}
+
+/* '.comment-section' 내부의 <button> 태그 (댓글 제출 버튼) 스타일 */
+.comment-section button {
+    background-color: #004080; /* 버튼의 배경색을 진한 파란색(#004080)으로 설정합니다. */
+    color: white; /* 버튼의 글자색을 흰색으로 설정합니다. */
+    border: none; /* 버튼의 테두리를 제거합니다. */
+    padding: 8px 12px; /* 상하 8픽셀, 좌우 12픽셀의 내부 여백을 설정합니다. */
+    border-radius: 3px; /* 테두리 모서리를 3픽셀 둥글게 만듭니다. */
+    cursor: pointer; /* 마우스 커서를 포인터 모양으로 변경하여 클릭 가능함을 나타냅니다. */
+}
+
+/* '.comment-section' 내부의 <button> 태그에 마우스 오버 시 스타일 */
+.comment-section button:hover {
+    background-color: #003060; /* 마우스 오버 시 배경색을 더 진한 파란색(#003060)으로 변경합니다. */
+}
+```
+
+### comments.css 
+```
+/*
+    comments.css 파일은 웹사이트의 댓글 섹션에 대한 모든 시각적 스타일을 정의합니다.
+    이 스타일시트는 댓글 목록, 개별 댓글 항목, 댓글 작성자 정보, 댓글 내용,
+    그리고 댓글 작성 폼에 이르기까지 댓글과 관련된 다양한 HTML 요소들의 디자인을 제어합니다.
+    특히, `view.html`이나 `view_bulletin_post.html`과 같은 파일에서 사용될 수 있도록
+    유연한 선택자들을 포함하고 있습니다.
+*/
+
+/* 댓글 섹션 전체에 대한 스타일 */
+/*
+    이 규칙은 `.comments-section` 클래스를 가진 요소, `<h2>댓글</h2>` 바로 뒤에 오는
+    `ul.comment-list` 요소, 그리고 `.comment-form` 클래스를 가진 요소에 공통적으로 적용됩니다.
+    이는 HTML 구조에 따라 다양한 방식으로 댓글 섹션을 감싸는 요소들을 타겟팅하기 위함입니다.
+*/
+.comments-section, h2 + .comment-list, .comment-form {
+    margin-top: 20px; /* 상단에 20픽셀의 외부 여백을 설정하여 다른 섹션과 구분합니다. */
+    padding: 15px; /* 내부적으로 15픽셀의 여백(패딩)을 추가하여 콘텐츠와 테두리 사이에 공간을 만듭니다. */
+    border: 1px solid #e0e0e0; /* 1픽셀 두께의 연한 회색 실선 테두리를 추가합니다. */
+    border-radius: 8px; /* 테두리 모서리를 8픽셀 둥글게 만들어 부드러운 느낌을 줍니다. */
+    background-color: #f9f9f9; /* 배경색을 아주 연한 회색으로 설정하여 섹션을 시각적으로 강조합니다. */
+}
+
+/* 댓글 섹션 제목 스타일 */
+/*
+    이 규칙은 `.comments-section` 내부의 `<h2>` 태그와 `h2.comments-title` 클래스를 가진 `<h2>` 태그에 적용됩니다.
+    주로 "댓글"과 같은 섹션 제목의 스타일을 정의합니다.
+*/
+.comments-section h2, h2.comments-title {
+    font-size: 1.5em; /* 기본 글꼴 크기의 1.5배로 설정하여 제목임을 명확히 합니다. */
+    color: #333; /* 글자색을 진한 회색(#333)으로 설정합니다. */
+    margin-bottom: 15px; /* 제목 아래에 15픽셀의 외부 여백을 설정합니다. */
+    border-bottom: 2px solid #eee; /* 2픽셀 두께의 아주 연한 회색 실선 하단 테두리를 추가하여 제목 아래에 구분선을 만듭니다. */
+    padding-bottom: 10px; /* 하단 테두리 위에 10픽셀의 내부 여백을 주어 텍스트와 구분선 사이의 공간을 확보합니다. */
+}
+
+/* 댓글 목록 (ul) 스타일 */
+/*
+    이 규칙은 `.comments-section` 내부의 `<ul>` 태그와 `.comment-list` 클래스를 가진 `<ul>` 태그에 적용됩니다.
+    댓글들이 나열되는 목록 전체의 스타일을 정의합니다.
+*/
+.comments-section ul, .comment-list {
+    list-style: none; /* 목록 항목의 기본 마커(예: 불릿 기호)를 제거하여 깔끔하게 만듭니다. */
+    padding: 0; /* 목록의 내부 여백(패딩)을 제거하여 콘텐츠가 컨테이너 가장자리에 붙도록 합니다. */
+    margin: 0; /* 목록의 외부 여백(마진)을 제거하여 불필요한 공간을 없앱니다. */
+}
+
+/* 개별 댓글 (li) 스타일 */
+/*
+    이 규칙은 `.comments-section` 내부의 `<ul>` 태그 안의 `<li>` 태그와 `.comment-list` 클래스를 가진 `<ul>` 태그 안의 `<li>` 태그에 적용됩니다.
+    각각의 개별 댓글 항목에 대한 스타일을 정의합니다.
+*/
+.comments-section ul li, .comment-list li {
+    background-color: #fff; /* 개별 댓글 항목의 배경색을 흰색으로 설정하여 가독성을 높입니다. */
+    border: 1px solid #ddd; /* 1픽셀 두께의 연한 회색 실선 테두리를 추가합니다. */
+    border-radius: 5px; /* 테두리 모서리를 5픽셀 둥글게 만들어 부드러운 느낌을 줍니다. */
+    padding: 10px 15px; /* 상하 10픽셀, 좌우 15픽셀의 내부 여백을 설정합니다. */
+    margin-bottom: 10px; /* 각 댓글 항목 사이에 10픽셀의 하단 외부 여백을 추가하여 구분합니다. */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* 약한 그림자 효과를 추가하여 항목에 입체감을 줍니다.
+                                               (가로 오프셋 0, 세로 오프셋 2, 블러 반경 4, 색상 투명도 5%) */
+}
+
+/* 마지막 개별 댓글 (li) 스타일 */
+/*
+    이 규칙은 댓글 목록의 마지막 `<li>` 항목에만 적용됩니다.
+*/
+.comments-section ul li:last-child, .comment-list li:last-child {
+    margin-bottom: 0; /* 마지막 댓글 항목의 하단 외부 여백을 제거하여 목록의 끝을 깔끔하게 정리합니다. */
+}
+
+/* 댓글 작성자 이름 스타일 */
+/*
+    이 규칙은 개별 댓글 항목 내의 `<strong>` 태그에 적용되며, 주로 작성자 이름을 나타내는 데 사용됩니다.
+*/
+.comments-section ul li strong, .comment-list li strong {
+    color: #007bff; /* 작성자 이름을 밝은 파란색(#007bff)으로 강조합니다. */
+    font-weight: bold; /* 글꼴 두께를 굵게 설정하여 시각적으로 더 돋보이게 합니다. */
+}
+
+/* 댓글 작성일자 스타일 */
+/*
+    이 규칙은 개별 댓글 항목 내의 `<small>` 태그에 적용되며, 주로 댓글 작성 시간을 나타내는 데 사용됩니다.
+*/
+.comments-section ul li small, .comment-list li small {
+    color: #888; /* 작성일자의 글자색을 회색(#888)으로 설정하여 보조적인 정보임을 나타냅니다. */
+    font-size: 0.85em; /* 글꼴 크기를 기본 글꼴 크기의 85%로 줄여서 작은 글씨로 표시합니다. */
+    margin-left: 10px; /* 작성자 이름으로부터 10픽셀의 왼쪽 외부 여백을 줍니다. */
+}
+
+/* 댓글 내용 스타일 */
+/*
+    이 규칙은 개별 댓글 항목 내의 `.comment-content` 클래스를 가진 요소와,
+    `.comments-section ul li` (즉, `<li>` 요소 자체)에 적용됩니다.
+    이는 댓글 내용이 `<p>` 태그 등으로 감싸져 있지 않고 `<li>` 바로 아래에 텍스트로 존재할 수 있는 경우를 고려한 것입니다.
+*/
+.comments-section ul li .comment-content, .comment-list li .comment-content,
+.comments-section ul li {
+    line-height: 1.6; /* 줄 간격을 1.6배로 설정하여 텍스트의 가독성을 높입니다. */
+    color: #555; /* 글자색을 중간 회색(#555)으로 설정합니다. */
+    white-space: pre-wrap; /* HTML에 작성된 공백 문자(스페이스, 탭)와 줄 바꿈을 그대로 유지하면서, 필요한 경우 줄 바꿈을 허용합니다.
+                               이는 긴 텍스트가 컨테이너를 벗어나지 않도록 하고, 사용자 입력 형식을 보존할 때 유용합니다. */
+    word-wrap: break-word; /* 긴 단어가 컨테이너의 너비를 초과할 경우, 단어를 끊어서 줄 바꿈하도록 설정합니다. */
+}
+
+/* 댓글이 없을 때의 메시지 스타일 */
+/*
+    이 규칙은 `.comments-section` 내부의 `<p>` 태그와 `p.no-comments-message` 클래스를 가진 `<p>` 태그에 적용됩니다.
+    주로 "댓글이 없습니다."와 같은 메시지를 표시할 때 사용됩니다.
+*/
+.comments-section p, p.no-comments-message {
+    color: #777; /* 글자색을 회색(#777)으로 설정합니다. */
+    text-align: center; /* 텍스트를 중앙 정렬합니다. */
+    padding: 20px; /* 내부적으로 20픽셀의 여백(패딩)을 추가합니다. */
+    background-color: #f0f0f0; /* 배경색을 아주 연한 회색(#f0f0f0)으로 설정합니다. */
+    border-radius: 5px; /* 모서리를 5픽셀 둥글게 만듭니다. */
+}
+
+/* 댓글 작성 폼 (comment-form) 스타일 */
+/*
+    이 규칙은 `.comment-form` 클래스를 가진 요소에 적용되며, 댓글을 작성하는 입력 필드와 버튼을 포함하는 영역입니다.
+*/
+.comment-form {
+    margin-top: 30px; /* 상단에 30픽셀의 외부 여백을 설정하여 댓글 목록과 명확히 구분합니다. */
+    padding: 20px; /* 내부적으로 20픽셀의 여백(패딩)을 추가합니다. */
+    border: 1px solid #e0e0e0; /* 1픽셀 두께의 연한 회색 실선 테두리를 추가합니다. */
+    border-radius: 8px; /* 테두리 모서리를 8픽셀 둥글게 만듭니다. */
+    background-color: #f9f9f9; /* 배경색을 아주 연한 회색으로 설정합니다. */
+}
+
+/* 댓글 작성 폼 제목 (<h3>) 스타일 */
+/*
+    이 규칙은 `.comment-form` 내부의 `<h3>` 태그에 적용됩니다.
+    주로 "댓글 작성"과 같은 폼의 제목을 나타냅니다.
+*/
+.comment-form h3 {
+    font-size: 1.3em; /* 기본 글꼴 크기의 1.3배로 설정하여 제목임을 나타냅니다. */
+    color: #333; /* 글자색을 진한 회색(#333)으로 설정합니다. */
+    margin-bottom: 15px; /* 제목 아래에 15픽셀의 외부 여백을 설정합니다. */
+}
+
+/* 댓글 입력란 (<textarea>) 스타일 */
+/*
+    이 규칙은 `.comment-form` 내부의 `<textarea>` 태그에 적용됩니다.
+    사용자가 댓글 내용을 입력하는 필드에 대한 스타일을 정의합니다.
+*/
+.comment-form textarea {
+    width: 100%; /* 너비를 부모 요소에 꽉 채우도록 설정합니다. */
+    padding: 10px; /* 내부적으로 10픽셀의 여백(패딩)을 추가합니다. */
+    border: 1px solid #ccc; /* 1픽셀 두께의 연한 회색 실선 테두리를 추가합니다. */
+    border-radius: 5px; /* 테두리 모서리를 5픽셀 둥글게 만듭니다. */
+    box-sizing: border-box; /* 패딩과 테두리가 요소의 전체 너비에 포함되도록 계산 방식을 변경합니다.
+                               이는 너비가 100%일 때 패딩과 테두리 때문에 요소가 부모를 벗어나는 것을 방지합니다. */
+    margin-bottom: 10px; /* 입력란 아래에 10픽셀의 외부 여백을 설정합니다. */
+    resize: vertical; /* 사용자가 세로 방향으로만 입력란의 크기를 조절할 수 있도록 허용합니다. */
+    min-height: 80px; /* 입력란의 최소 높이를 80픽셀로 설정하여 충분한 입력 공간을 제공합니다. */
+}
+
+/* 댓글 제출 버튼 (<button> 또는 <input type="submit">) 스타일 */
+/*
+    이 규칙은 `.comment-form` 내부의 `<button>` 태그와 `input[type="submit"]` 태그에 공통적으로 적용됩니다.
+    댓글 작성을 완료하고 제출하는 버튼에 대한 스타일을 정의합니다.
+*/
+.comment-form button, .comment-form input[type="submit"] {
+    background-color: #007bff; /* 버튼의 배경색을 밝은 파란색(#007bff)으로 설정합니다. */
+    color: white; /* 버튼의 글자색을 흰색으로 설정합니다. */
+    padding: 10px 20px; /* 상하 10픽셀, 좌우 20픽셀의 내부 여백을 설정합니다. */
+    border: none; /* 버튼의 테두리를 제거합니다. */
+    border-radius: 5px; /* 테두리 모서리를 5픽셀 둥글게 만듭니다. */
+    cursor: pointer; /* 마우스 커서를 포인터 모양으로 변경하여 클릭 가능함을 나타냅니다. */
+    font-size: 1em; /* 글꼴 크기를 기본 글꼴 크기와 동일하게 설정합니다. */
+    transition: background-color 0.3s ease; /* 배경색 변경 시 0.3초 동안 부드러운 전환 효과를 적용하여 사용자 경험을 향상시킵니다. */
+}
+
+/* 댓글 제출 버튼에 마우스 오버 시 (hover) 스타일 */
+/*
+    이 규칙은 `.comment-form` 내부의 `<button>` 태그와 `input[type="submit"]` 태그에 마우스 커서가 올라갔을 때 적용됩니다.
+*/
+.comment-form button:hover, .comment-form input[type="submit"]:hover {
+    background-color: #0056b3; /* 마우스 오버 시 배경색을 더 진한 파란색(#0056b3)으로 변경합니다. */
+}
+```
+
+
+
+
+
 # templates 
 ### board.html 
 - 문의 게시판 목록
