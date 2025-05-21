@@ -2100,3 +2100,18 @@ with app.app_context():
 if __name__ == '__main__':
     app.run(debug=True)
 ```
+
+## .env 
+```
+# Google OAuth 클라이언트 ID (Google Cloud Console에서 발급받은 실제 ID)
+GOOGLE_CLIENT_ID=621398812009-fs2rh4oeemulpjfkje2ie1bgllel57r7.apps.googleusercontent.com
+
+# Google OAuth 클라이언트 보안 비밀 (Google Cloud Console에서 발급받은 실제 보안 비밀)
+GOOGLE_CLIENT_SECRET=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
+
+# Google Gemini API 키 (Google AI Studio 또는 Google Cloud Console에서 발급받은 실제 API 키)
+GENAI_API_KEY=AIzaSyBK1CPlrVCCXfjxFuMt_F2h0zW1embq3Ws
+
+# Flask 애플리케이션의 시크릿 키 (세션 관리에 사용)
+SECRET_KEY=f4e2c6d8a7b1c0d9e8f7a6b5c4d3e2f10987654321fedcba9876543210fedcba
+```
