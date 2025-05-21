@@ -1,4 +1,9 @@
 # pip로 다운 
+- 한번에 다운
+```
+pip install Flask Flask-SQLAlchemy Werkzeug Flask-Login python-dotenv google-generativeai Authlib
+```
+
 - Flask 설치
 ```
 pip install flask
