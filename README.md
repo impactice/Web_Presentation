@@ -13,7 +13,7 @@ pip install flask
 ```
 python -m flask --version
 ```
-
+-  SQLAlchemy(데이터베이스 ORM)
 ```
 pip install Flask-SQLAlchemy
 ```
