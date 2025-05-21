@@ -87,7 +87,7 @@ myweb/
 
 # templates 
 ### board.html 
-- 문의 게시판
+- 문의 게시판 목록
 ```
 <!DOCTYPE html>
 <html>
@@ -178,7 +178,8 @@ myweb/
 </html>
 ```
 
-### bulletin_board.html
+### bulletin_board.html 
+- 일반 게시글 작성 폼
 ```
 <!DOCTYPE html>
 <html lang="ko"> <head>
@@ -283,6 +284,7 @@ myweb/
 ```
 
 ### index.html 
+- 메인 페이지
 ```
 <!DOCTYPE html>
 <html lang="ko"> <head>
@@ -583,7 +585,7 @@ myweb/
 ```
 
 ### new_bulletin_post.html
-
+- 일반 게시글 작성
 ```
 <!DOCTYPE html>
 <html lang="ko"> <head>
@@ -664,6 +666,7 @@ myweb/
 
 ```
 ### new_post.html
+- 문의 게시글 상세 보기
 ```
 <!DOCTYPE html>
 <html lang="ko"> <head>
@@ -806,6 +809,7 @@ myweb/
 ```
 
 ### view_bulletin_post.html 
+- 일반 게시글 상세 보기 
 ```
 <!DOCTYPE html>
 <html lang="ko"> <head>
@@ -956,7 +960,8 @@ myweb/
 
 ```
 
-### view.html
+### view.html 
+- 문의 게시시글 상세보기 
 ```
 <!DOCTYPE html>
 <html>
