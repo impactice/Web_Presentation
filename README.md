@@ -1,4 +1,4 @@
-# pip 다운 
+# pip로 다운 
 - Flask 설치
 ```
 pip install flask
@@ -11,6 +11,14 @@ python -m flask --version
 
 ```
 pip install Flask-SQLAlchemy
+```
+
+# pip 다운이 안 된다면 
+```
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+```
+```
+python get-pip.py
 ```
 # 파일 전체 흐름
 ```
