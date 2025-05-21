@@ -47,6 +47,10 @@ myweb/
 └── instance/               # 데이터베이스 파일
     └── database.db         # SQLite 데이터베이스 파일
 ```
+- `app.py`는 모든 백엔드 로직을 처리하며, `templates` 폴더의 HTML 파일들을 렌더링하여 사용자에게 보여줍니다.
+- `static` 폴더는 웹 페이지의 디자인과 동적인 요소를 담당하는 CSS, JavaScript, 이미지 파일들을 포함합니다.
+- `instance` 폴더에는 SQLite 데이터베이스 파일이 저장됩니다.
+- `.env` 파일은 민감한 API 키와 같은 환경 변수를 안전하게 관리하는 데 사용됩니다.
 
 # templates 
 ### board.html 
