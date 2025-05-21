@@ -15,36 +15,37 @@ pip install Flask-SQLAlchemy
 # 파일 전체 흐름
 ```
 myweb/
-├── app.py
-├── .env
-├── templates/
-│   ├── index.html
-│   ├── bulletin_board.html
-│   ├── edit_post.html
-│   ├── login.html
-│   ├── new_bulletin_post.html
-│   ├── new_post.html
-│   ├── register.html
-│   ├── view.html
-│   ├── view_bulletin_post.html
-│   ├── building/
+├── app.py                  # Flask 애플리케이션의 핵심 로직 (백엔드)
+├── .env                    # 환경 변수 (API 키, 시크릿 키 등)
+├── templates/              # HTML 템플릿 파일 (프론트엔드)
+│   ├── index.html          # 메인 페이지
+│   ├── bulletin_board.html # 일반 게시판 목록
+│   ├── edit_post.html      # 문의 게시글 수정 폼
+│   ├── login.html          # 로그인 페이지
+│   ├── new_bulletin_post.html # 일반 게시글 작성 폼
+│   ├── new_post.html       # 문의 게시글 작성 폼
+│   ├── register.html       # 회원가입 페이지
+│   ├── view.html           # 문의 게시글 상세 보기
+│   ├── view_bulletin_post.html # 일반 게시글 상세 보기
+│   ├── building/           # 건물 정보 페이지
 │   │   ├── B01.html
 │   │   ├── B26.html
 │   │   └── B27.html
-│   └── board.html
-├── static/            # 정적 파일
-│   ├── buildingC/
+│   └── board.html          # 문의 게시판 목록
+├── static/                 # 정적 파일 (CSS, JavaScript, 이미지)
+│   ├── buildingC/          # 건물별 CSS
 │   │   └── B01.css
-│   ├── images/
+│   ├── images/             # 이미지 파일
 │   │   └── ...
-│   ├── board.css
-│   ├── bulletin_board.css
-│   ├── image_slider.css
-│   ├── image_slider.js
-│   ├── style.css
-│   └── view.css
-└── instance/          # 데이터베이스 파일 (database.db)
-    └── database.db 
+│   ├── board.css           # 문의 게시판 스타일
+│   ├── bulletin_board.css  # 일반 게시판 스타일
+│   ├── comments.css        # 댓글 스타일
+│   ├── image_slider.css    # 이미지 슬라이더 스타일
+│   ├── image_slider.js     # 이미지 슬라이더 JavaScript
+│   ├── style.css           # 전역 스타일
+│   └── view.css            # 게시글 상세 보기 스타일
+└── instance/               # 데이터베이스 파일
+    └── database.db         # SQLite 데이터베이스 파일
 ```
 
 # templates 
