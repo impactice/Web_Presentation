@@ -17,14 +17,26 @@ python -m flask --version
 ```
 pip install Flask-SQLAlchemy
 ```
+- Flask의 내부에서 사용되는 WSGI 유틸리티 라이브러리 (할 필요 없음)
+```
+pip install Werkzeug
+```
 - 사용자 세션 관리를 위한 확장
-
+```
+pip install Flask-Login
+```
 - .env 파일에 환경 변수(예: SECRET_KEY, GOOGLE_CLIENT_ID, GENAI_API_KEY)를 저장하고 로드하는 데 사용
-
+```
+pip install python-dotenv
+```
 - Google Gemini API와 상호작용하기 위한 
-
+```
+pip install google-generativeai
+```
 - Google OAuth 2.0 연동을 위해 사용되는 라이브러리
-
+```
+pip install Authlib
+```
 
 # pip 다운이 안 된다면 
 ```
