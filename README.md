@@ -1269,7 +1269,8 @@ myweb/
 </html>
 ```
 
-### B26.html
+### B26.html 
+- 26호관
 ```
 <!DOCTYPE html>
 <html lang="ko">
@@ -1441,6 +1442,7 @@ myweb/
 ```
 
 ### B27.html 
+- 27호관
 ```
 <!DOCTYPE html>
 <html lang="ko">
