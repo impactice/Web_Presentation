@@ -17,6 +17,14 @@ python -m flask --version
 ```
 pip install Flask-SQLAlchemy
 ```
+- 사용자 세션 관리를 위한 확장
+
+- .env 파일에 환경 변수(예: SECRET_KEY, GOOGLE_CLIENT_ID, GENAI_API_KEY)를 저장하고 로드하는 데 사용
+
+- Google Gemini API와 상호작용하기 위한 
+
+- Google OAuth 2.0 연동을 위해 사용되는 라이브러리
+
 
 # pip 다운이 안 된다면 
 ```
