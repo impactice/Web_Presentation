@@ -1091,6 +1091,490 @@ pip install Flask-SQLAlchemy
 </html>
 ```
 
+## app.py
+```
+import os # 운영체제와 상호작용하는 기능을 제공 (예: 환경 변수 접근)
+from flask import Flask, render_template, request, redirect, url_for, jsonify, session # Flask 웹 프레임워크의 핵심 모듈 임포트
+from flask_sqlalchemy import SQLAlchemy # Flask 애플리케이션에서 SQLAlchemy를 사용하기 위한 확장 기능 임포트
+from datetime import datetime # 날짜와 시간을 다루기 위한 모듈 임포트
+from werkzeug.security import generate_password_hash, check_password_hash # 비밀번호 해싱 및 검증을 위한 함수 임포트
+from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user # 사용자 인증 관리를 위한 Flask-Login 확장 기능 임포트
+import google.generativeai as genai # Google Gemini API와 상호작용하기 위한 라이브러리 임포트
+from authlib.integrations.flask_client import OAuth # OAuth 클라이언트 구현을 위한 Authlib 확장 기능 임포트
+from dotenv import load_dotenv # .env 파일에서 환경 변수를 로드하기 위한 라이브러리 임포트
 
+# .env 파일 로드
+# 이 함수는 애플리케이션 시작 시 .env 파일에 정의된 환경 변수(예: SECRET_KEY, GOOGLE_CLIENT_ID, API_KEY 등)를
+# 시스템 환경 변수로 로드하여 os.getenv() 함수로 접근할 수 있게 합니다.
+load_dotenv()
 
+# Flask 애플리케이션 초기화
+# __name__은 현재 모듈의 이름을 나타내며, Flask가 리소스(템플릿, 정적 파일)를 찾는 데 사용됩니다.
+# template_folder='templates'는 템플릿 파일이 'templates' 디렉토리에 있음을 명시적으로 지정합니다.
+app = Flask(__name__, template_folder='templates')
 
+# SQLAlchemy 데이터베이스 URI 설정
+# 'sqlite:///database.db'는 프로젝트 루트 디렉토리에 'database.db'라는 SQLite 데이터베이스 파일을 생성합니다.
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+# SQLAlchemy 이벤트 시스템이 객체 변경 사항을 추적하는 것을 비활성화합니다.
+# 이는 메모리 사용량을 줄이고 성능을 향상시킬 수 있지만, 개발 중에는 True로 설정하여 디버깅에 도움을 받을 수도 있습니다.
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# 애플리케이션의 시크릿 키 설정
+# 세션 관리 및 기타 보안 관련 작업에 사용됩니다. .env 파일에서 로드됩니다.
+app.secret_key = os.getenv('SECRET_KEY')
+# 시크릿 키가 설정되지 않았다면 오류를 발생시켜 개발자가 문제를 인지하도록 합니다.
+if not app.secret_key:
+    raise ValueError("SECRET_KEY 환경 변수가 설정되지 않았습니다. .env 파일을 확인하세요. (예: python -c \"import os; print(os.urandom(24).hex())\" 로 생성)")
+
+# SQLAlchemy 데이터베이스 객체 초기화
+# 이 객체를 통해 데이터베이스 모델을 정의하고 데이터베이스와 상호작용합니다.
+db = SQLAlchemy(app)
+
+# Flask-Login LoginManager 초기화
+# Flask-Login은 사용자 세션을 관리하고 로그인/로그아웃 기능을 제공합니다.
+login_manager = LoginManager()
+login_manager.init_app(app) # Flask 앱에 LoginManager를 연결합니다.
+login_manager.login_view = 'login' # 로그인되지 않은 사용자가 @login_required 데코레이터가 적용된 페이지에 접근하려 할 때 리다이렉트될 로그인 뷰의 이름을 설정합니다.
+
+# Google OAuth 2.0 설정
+# Google Cloud Console에서 발급받은 클라이언트 ID와 시크릿을 환경 변수에서 로드합니다.
+GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
+GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
+
+# 디버깅: 클라이언트 ID와 시크릿이 제대로 로드되었는지 확인 (서버 시작 시 터미널에 출력됨)
+# 실제 값 대신 부분적으로만 표시하여 보안을 유지합니다.
+print(f"DEBUG: Loaded GOOGLE_CLIENT_ID: {'*' * (len(GOOGLE_CLIENT_ID) - 10) + GOOGLE_CLIENT_ID[-10:] if GOOGLE_CLIENT_ID else 'None'}")
+print(f"DEBUG: Loaded GOOGLE_CLIENT_SECRET: {'*' * (len(GOOGLE_CLIENT_SECRET) - 5) if GOOGLE_CLIENT_SECRET else 'None'}")
+
+# Google OpenID Connect 구성 정보를 가져올 URL입니다.
+# Authlib이 이 URL에서 Google의 인증 엔드포인트, 토큰 엔드포인트 등을 자동으로 발견합니다.
+CONF_URL = 'https://accounts.google.com/.well-known/openid-configuration'
+
+# Authlib OAuth 객체 초기화
+oauth = OAuth(app)
+
+# Google OAuth 클라이언트 등록
+# name: OAuth 공급자의 이름 (여기서는 'google')
+# client_id, client_secret: Google Cloud Console에서 발급받은 자격 증명
+# server_metadata_url: OpenID Connect 구성 정보를 가져올 URL
+# client_kwargs: OAuth 요청에 추가될 매개변수. 'scope'는 사용자로부터 얻을 권한을 지정합니다.
+#                'openid'는 OpenID Connect를 사용함을 나타내고, 'email'과 'profile'은 사용자 이메일과 프로필 정보에 대한 접근 권한을 요청합니다.
+oauth.register(
+    name='google',
+    client_id=GOOGLE_CLIENT_ID,
+    client_secret=GOOGLE_CLIENT_SECRET,
+    server_metadata_url=CONF_URL,
+    client_kwargs={'scope': 'openid email profile'},
+)
+
+# Gemini API 키 설정 (환경 변수에서 로드)
+# API 키는 보안상 코드에 직접 하드코딩하지 않고 환경 변수를 통해 관리하는 것이 좋습니다.
+GENAI_API_KEY = os.getenv("GENAI_API_KEY")
+# Gemini API 클라이언트 구성. 발급받은 API 키를 설정합니다.
+genai.configure(api_key=GENAI_API_KEY)
+
+# Gemini 모델 설정
+MODEL_NAME = "gemini-1.5-flash" # 사용할 Gemini 모델의 이름
+generation_config = {
+    "temperature": 0.9, # 출력의 무작위성(창의성)을 제어합니다. 0에 가까울수록 결정적이고 반복적인 출력을 생성합니다.
+    "top_p": 1.0 # 샘플링 시 고려할 토큰의 확률 질량 누적 합계를 제어합니다.
+}
+safety_settings = [
+    # 콘텐츠 필터링 설정: 특정 카테고리의 유해한 콘텐츠 생성을 방지합니다.
+    {"category": "harassment", "threshold": "block_medium_and_above"}, # 괴롭힘 관련 콘텐츠 차단
+    {"category": "hate_speech", "threshold": "block_medium_and_above"}, # 혐오 발언 관련 콘텐츠 차단
+    {"category": "sexually_explicit", "threshold": "block_medium_and_above"} # 성적으로 노골적인 콘텐츠 차단
+]
+# Gemini 모델 인스턴스 생성
+model = genai.GenerativeModel(
+    model_name=MODEL_NAME,
+    generation_config=generation_config,
+    safety_settings=safety_settings
+)
+
+# 데이터베이스 모델 정의
+# UserMixin을 상속받아 Flask-Login이 필요로 하는 속성(is_authenticated, is_active, is_anonymous, get_id())을 자동으로 제공합니다.
+class User(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True) # 사용자 ID (기본 키, 자동 증가)
+    username = db.Column(db.String(80), unique=True, nullable=False) # 사용자 이름 (고유해야 하며, NULL 허용 안 함)
+    password = db.Column(db.String(120), nullable=True) # 해싱된 비밀번호 (Google 로그인 사용자는 NULL 허용)
+    google_id = db.Column(db.String(120), unique=True, nullable=True) # Google OAuth ID (고유해야 하며, NULL 허용)
+    email = db.Column(db.String(120), unique=True, nullable=True) # 이메일 주소 (고유해야 하며, NULL 허용)
+    profile_picture = db.Column(db.String(255), nullable=True) # 프로필 사진 URL (NULL 허용)
+    registration_date = db.Column(db.DateTime, default=datetime.utcnow) # 가입일 (기본값은 현재 UTC 시간)
+    # Post 모델과의 관계 정의: User는 여러 개의 Post를 작성할 수 있습니다.
+    # 'Post'는 관계를 맺을 다른 모델의 이름, backref는 Post 모델에서 User 객체에 접근할 때 사용할 이름, lazy는 로딩 전략입니다.
+    posts = db.relationship('Post', backref='user_posts', lazy=True)
+    # BulletinPost 모델과의 관계 정의: User는 여러 개의 BulletinPost를 작성할 수 있습니다.
+    bulletin_posts = db.relationship('BulletinPost', backref='user_bulletin_posts', lazy=True)
+
+    def __repr__(self):
+        # 객체를 문자열로 표현할 때 사용됩니다. 디버깅에 유용합니다.
+        return f'<User {self.username}>'
+
+class Post(db.Model):
+    id = db.Column(db.Integer, primary_key=True) # 게시글 ID (기본 키, 자동 증가)
+    title = db.Column(db.String(100), nullable=False) # 게시글 제목 (NULL 허용 안 함)
+    content = db.Column(db.Text, nullable=False) # 게시글 내용 (TEXT 타입, NULL 허용 안 함)
+    date_posted = db.Column(db.DateTime, default=datetime.utcnow) # 작성일 (기본값은 현재 UTC 시간)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False) # 작성자 User의 ID (외래 키, NULL 허용 안 함)
+    # User 모델과의 관계 정의: Post는 한 명의 User에 의해 작성됩니다.
+    # 'User'는 관계를 맺을 다른 모델의 이름, backref는 User 모델에서 Post 객체에 접근할 때 사용할 이름, lazy는 로딩 전략입니다.
+    author = db.relationship('User', backref='written_posts', lazy=True)
+    # Comment 모델과의 관계 정의: Post는 여러 개의 Comment를 가질 수 있습니다.
+    # cascade='all, delete-orphan': Post가 삭제될 때 연결된 Comment들도 함께 삭제되도록 합니다.
+    comments = db.relationship('Comment', backref='post_comments', cascade='all, delete-orphan', lazy=True)
+
+    def __repr__(self):
+        return f'<Post {self.title}>'
+
+class BulletinPost(db.Model):
+    id = db.Column(db.Integer, primary_key=True) # 게시글 ID (기본 키, 자동 증가)
+    title = db.Column(db.String(100), nullable=False) # 게시글 제목 (NULL 허용 안 함)
+    content = db.Column(db.Text, nullable=False) # 게시글 내용 (TEXT 타입, NULL 허용 안 함)
+    date_posted = db.Column(db.DateTime, default=datetime.utcnow) # 작성일 (기본값은 현재 UTC 시간)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False) # 작성자 User의 ID (외래 키, NULL 허용 안 함)
+    # User 모델과의 관계 정의: BulletinPost는 한 명의 User에 의해 작성됩니다.
+    author = db.relationship('User', backref='written_bulletin_posts', lazy=True)
+    # Comment 모델과의 관계 정의: BulletinPost는 여러 개의 Comment를 가질 수 있습니다.
+    # cascade='all, delete-orphan': BulletinPost가 삭제될 때 연결된 Comment들도 함께 삭제되도록 합니다.
+    comments = db.relationship('Comment', backref='bulletin_post_comments', cascade='all, delete-orphan', lazy=True)
+
+    def __repr__(self):
+        return f'<BulletinPost {self.title}>'
+
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True) # 댓글 ID (기본 키, 자동 증가)
+    content = db.Column(db.Text, nullable=False) # 댓글 내용 (TEXT 타입, NULL 허용 안 함)
+    date_posted = db.Column(db.DateTime, default=datetime.utcnow) # 작성일 (기본값은 현재 UTC 시간)
+    
+    # 댓글이 어떤 종류의 게시글에 속하는지 나타내는 외래 키.
+    # Post.id 또는 BulletinPost.id 중 하나만 값이 있을 수 있습니다.
+    # nullable=True로 설정하여 둘 중 하나는 비어있을 수 있도록 합니다.
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=True)
+    bulletin_post_id = db.Column(db.Integer, db.ForeignKey('bulletin_post.id'), nullable=True)
+    
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False) # 댓글 작성자 User의 ID (외래 키, NULL 허용 안 함)
+    
+    # Post 모델과의 관계 정의: Comment는 하나의 Post에 속할 수 있습니다.
+    # foreign_keys=[post_id]는 이 관계가 post_id 컬럼을 사용함을 명시합니다.
+    # backref='post_comments'는 Post 모델에서 이 댓글에 접근할 때 사용할 이름을 정의합니다.
+    post = db.relationship('Post', backref='post_comments', foreign_keys=[post_id], lazy=True)
+    # BulletinPost 모델과의 관계 정의: Comment는 하나의 BulletinPost에 속할 수 있습니다.
+    # foreign_keys=[bulletin_post_id]는 이 관계가 bulletin_post_id 컬럼을 사용함을 명시합니다.
+    # backref='bulletin_comments'는 BulletinPost 모델에서 이 댓글에 접근할 때 사용할 이름을 정의합니다.
+    bulletin_post = db.relationship('BulletinPost', backref='bulletin_comments', foreign_keys=[bulletin_post_id], lazy=True)
+    
+    # User 모델과의 관계 정의: Comment는 한 명의 User에 의해 작성됩니다.
+    # backref='authored_comments'는 User 모델에서 이 댓글에 접근할 때 사용할 이름을 정의합니다.
+    author = db.relationship('User', backref='authored_comments', lazy=True)
+
+    def __repr__(self):
+        return f'<Comment {self.id}>'
+
+# Flask-Login: 사용자 로더 함수
+# 세션에서 사용자 ID를 기반으로 User 객체를 로드합니다.
+# 이 함수는 Flask-Login이 세션에서 사용자 ID를 가져올 때마다 호출됩니다.
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+# --- 라우트 정의 ---
+
+# 루트 URL ('/')에 대한 라우트
+@app.route('/')
+def index():
+    # 최근 게시판 게시글 5개를 작성일 기준으로 내림차순 정렬하여 가져옵니다.
+    recent_posts = BulletinPost.query.order_by(BulletinPost.date_posted.desc()).limit(5).all()
+    # 'index.html' 템플릿을 렌더링하고, 최근 게시글 목록과 현재 로그인된 사용자 정보를 전달합니다.
+    return render_template('index.html', recent_posts=recent_posts, current_user=current_user)
+
+# 회원가입 라우트 ('/register')
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    # 요청 방식이 POST일 경우 (폼 제출)
+    if request.method == 'POST':
+        username = request.form['username'] # 폼에서 사용자 이름 가져오기
+        password = request.form['password'] # 폼에서 비밀번호 가져오기
+        hashed_password = generate_password_hash(password) # 비밀번호를 해싱하여 저장 (보안 강화)
+        
+        # 이미 존재하는 사용자 이름인지 확인
+        existing_user = User.query.filter_by(username=username).first()
+        if existing_user:
+            return "이미 사용 중인 사용자 이름입니다." # 이미 있다면 오류 메시지 반환
+        
+        # 새로운 사용자 객체 생성 및 데이터베이스에 추가
+        new_user = User(username=username, password=hashed_password)
+        db.session.add(new_user)
+        db.session.commit() # 변경사항 커밋
+        return redirect(url_for('login')) # 회원가입 성공 후 로그인 페이지로 리다이렉트
+    # 요청 방식이 GET일 경우 (페이지 로드)
+    return render_template('register.html') # 회원가입 폼 렌더링
+
+# 로그인 라우트 ('/login')
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    # 요청 방식이 POST일 경우 (폼 제출)
+    if request.method == 'POST':
+        username = request.form['username'] # 폼에서 사용자 이름 가져오기
+        password = request.form['password'] # 폼에서 비밀번호 가져오기
+        user = User.query.filter_by(username=username).first() # 데이터베이스에서 사용자 이름으로 사용자 조회
+        
+        # 사용자가 존재하고 비밀번호가 일치하는지 확인
+        if user and check_password_hash(user.password, password):
+            login_user(user) # Flask-Login을 사용하여 사용자 로그인 처리 (세션에 사용자 ID 저장)
+            return redirect(url_for('index')) # 로그인 성공 후 메인 페이지로 리다이렉트
+        else:
+            return '로그인 실패: 사용자 이름 또는 비밀번호가 올바르지 않습니다.' # 로그인 실패 메시지 반환
+    # 요청 방식이 GET일 경우 (페이지 로드)
+    return render_template('login.html') # 로그인 폼 렌더링
+
+# Google 로그인 시작 라우트 ('/login/google')
+@app.route('/login/google')
+def google_login():
+    # Google OAuth 콜백 URL을 생성합니다. _external=True는 절대 URL을 생성하도록 합니다.
+    redirect_uri = url_for('google_authorize', _external=True)
+    # Authlib을 사용하여 Google OAuth 인증 흐름을 시작합니다.
+    # 사용자를 Google 로그인 페이지로 리다이렉트합니다.
+    return oauth.google.authorize_redirect(redirect_uri)
+
+# Google OAuth 콜백 처리 라우트 ('/callback')
+# Google 로그인 후 Google 서버가 이 URL로 사용자를 리다이렉트합니다.
+@app.route('/callback')
+def google_authorize():
+    try:
+        # 디버깅을 위한 출력문
+        print(f"\n--- Google OAuth Callback Debug ---")
+        print(f"DEBUG: Attempting to authorize access token...")
+        # Google로부터 받은 인증 코드를 사용하여 액세스 토큰을 요청하고 파싱합니다.
+        # 이 과정에서 Google 서버와 통신합니다.
+        token = oauth.google.authorize_access_token()
+        print(f"DEBUG: Token acquired: {token}")
+
+        print(f"DEBUG: Attempting to parse ID token...")
+        # Authlib 1.0.0 이상에서는 nonce를 parse_id_token()에 명시적으로 전달해야 합니다.
+        # nonce는 authorize_redirect() 호출 시 Authlib이 세션에 자동으로 저장합니다.
+        user_info = oauth.google.parse_id_token(token, nonce=session.get('nonce'))
+        print(f"DEBUG: ID token parsed: {user_info}")
+
+        # 사용자 정보 추출 및 디버깅 출력
+        print(f"    - Google ID (sub): {user_info.get('sub')}")
+        print(f"    - Email: {user_info.get('email')}")
+        print(f"    - Name: {user_info.get('name')}")
+        print(f"    - Profile Picture: {user_info.get('picture')}")
+
+        google_id = user_info.get('sub') # Google 고유 사용자 ID
+        # 데이터베이스에서 해당 Google ID를 가진 사용자가 있는지 확인
+        user = User.query.filter_by(google_id=google_id).first()
+        print(f"DEBUG: User lookup by google_id '{google_id}': {'Found' if user else 'Not Found'}")
+
+        if not user:
+            # 새로운 Google 로그인 사용자일 경우
+            email = user_info.get('email')
+            # 이메일을 기반으로 사용자 이름 후보를 생성하거나, 이메일이 없으면 Google ID 기반으로 생성
+            username_candidate = email if email else f"google_user_{google_id}"
+            
+            # 기존 사용자 이름 또는 이메일과 충돌하는지 확인
+            existing_user_by_username = User.query.filter_by(username=username_candidate).first()
+            existing_user_by_email = User.query.filter_by(email=email).first()
+
+            print(f"DEBUG: New user path: Proposed username: '{username_candidate}'")
+            if existing_user_by_username or existing_user_by_email:
+                # 충돌 발생 시 사용자 이름 변경 (예: google_ID)
+                username = f"google_{google_id}"
+                print(f"DEBUG: Conflict detected, modified username to: '{username}')")
+                # 만약 이메일이 이미 다른 Google ID와 연결되어 있다면, 이메일 필드를 None으로 설정하여 중복 방지
+                if existing_user_by_email and existing_user_by_email.google_id != google_id:
+                    email = None
+            else:
+                username = username_candidate # 충돌 없으면 후보 사용자 이름 사용
+
+            # 새로운 사용자 객체 생성 및 데이터베이스에 추가
+            user = User(
+                username=username,
+                google_id=google_id,
+                email=email,
+                profile_picture=user_info.get('picture')
+            )
+            db.session.add(user)
+            db.session.commit()
+            print(f"DEBUG: New user created in DB: {user}")
+
+        login_user(user) # Flask-Login을 사용하여 사용자 로그인 처리
+        print(f"DEBUG: User '{user.username}' (ID: {user.id}) logged in successfully via Google.")
+        print(f"--- Google OAuth Callback Debug End ---\n")
+        return redirect(url_for('index')) # 로그인 성공 후 메인 페이지로 리다이렉트
+
+    except Exception as e:
+        # OAuth 과정 중 오류 발생 시 디버깅 메시지 출력
+        print(f"\n!!! CRITICAL ERROR during Google OAuth callback: {e} !!!\n")
+        raise e # 오류를 다시 발생시켜 스택 트레이스를 볼 수 있도록 함
+
+# 로그아웃 라우트 ('/logout')
+@app.route('/logout')
+@login_required # 로그인된 사용자만 접근 가능하도록 합니다.
+def logout():
+    logout_user() # Flask-Login을 사용하여 사용자 로그아웃 처리 (세션에서 사용자 ID 제거)
+    return redirect(url_for('index')) # 로그아웃 후 메인 페이지로 리다이렉트
+
+# 문의 게시판 라우트 ('/board')
+@app.route('/board')
+@login_required # 로그인된 사용자만 접근 가능하도록 합니다.
+def board():
+    # 모든 문의 게시글을 작성일 기준으로 내림차순 정렬하여 가져옵니다.
+    posts = Post.query.order_by(Post.date_posted.desc()).all()
+    # 'board.html' 템플릿을 렌더링하고, 게시글 목록을 전달합니다.
+    return render_template('board.html', posts=posts)
+
+# 새 문의 게시글 작성 라우트 ('/post/new')
+@app.route('/post/new', methods=['GET', 'POST'])
+@login_required # 로그인된 사용자만 접근 가능하도록 합니다.
+def new_post():
+    # 요청 방식이 POST일 경우 (폼 제출)
+    if request.method == 'POST':
+        title = request.form['title'] # 폼에서 제목 가져오기
+        content = request.form['content'] # 폼에서 내용 가져오기
+        # 새로운 Post 객체 생성. author는 현재 로그인된 사용자(current_user)로 자동 설정됩니다.
+        post = Post(title=title, content=content, author=current_user)
+        db.session.add(post) # 데이터베이스 세션에 추가
+        db.session.commit() # 변경사항 커밋
+        return redirect(url_for('board')) # 게시글 작성 후 문의 게시판으로 리다이렉트
+    # 요청 방식이 GET일 경우 (페이지 로드)
+    return render_template('new_post.html') # 새 게시글 작성 폼 렌더링
+
+# 문의 게시글 상세 보기 라우트 ('/post/<int:post_id>')
+@app.route('/post/<int:post_id>')
+def view_post(post_id):
+    # post_id에 해당하는 게시글을 데이터베이스에서 조회합니다.
+    # 게시글이 없으면 404 Not Found 오류를 발생시킵니다.
+    post = Post.query.get_or_404(post_id)
+    # 'view.html' 템플릿을 렌더링하고, 해당 게시글 객체를 전달합니다.
+    return render_template('view.html', post=post)
+
+# 문의 게시글 수정 라우트 ('/post/edit/<int:post_id>')
+@app.route('/post/edit/<int:post_id>', methods=['GET', 'POST'])
+@login_required # 로그인된 사용자만 접근 가능하도록 합니다.
+def edit_post(post_id):
+    post = Post.query.get_or_404(post_id) # post_id에 해당하는 게시글 조회
+    # 현재 로그인된 사용자가 게시글의 작성자가 아닌 경우 접근 권한 없음 메시지 반환
+    if post.author != current_user:
+        return '접근 권한이 없습니다.'
+    # 요청 방식이 POST일 경우 (폼 제출)
+    if request.method == 'POST':
+        post.title = request.form['title'] # 폼에서 새 제목 가져와 업데이트
+        post.content = request.form['content'] # 폼에서 새 내용 가져와 업데이트
+        db.session.commit() # 변경사항 커밋
+        return redirect(url_for('view_post', post_id=post.id)) # 수정 후 해당 게시글 상세 페이지로 리다이렉트
+    # 요청 방식이 GET일 경우 (페이지 로드)
+    return render_template('edit_post.html', post=post) # 수정 폼 렌더링 (기존 내용 채워짐)
+
+# 문의 게시글 삭제 라우트 ('/post/delete/<int:post_id>')
+@app.route('/post/delete/<int:post_id>')
+@login_required # 로그인된 사용자만 접근 가능하도록 합니다.
+def delete_post(post_id):
+    post = Post.query.get_or_404(post_id) # post_id에 해당하는 게시글 조회
+    # 현재 로그인된 사용자가 게시글의 작성자가 아닌 경우 접근 권한 없음 메시지 반환
+    if post.author != current_user:
+        return '접근 권한이 없습니다.'
+    db.session.delete(post) # 데이터베이스 세션에서 게시글 삭제
+    db.session.commit() # 변경사항 커밋
+    return redirect(url_for('board')) # 삭제 후 문의 게시판으로 리다이렉트
+
+# 문의 게시글에 댓글 추가 라우트 ('/post/<int:post_id>/comment')
+@app.route('/post/<int:post_id>/comment', methods=['POST'])
+@login_required # 로그인된 사용자만 댓글 작성 가능하도록 합니다.
+def add_comment(post_id):
+    post = Post.query.get_or_404(post_id) # post_id에 해당하는 게시글 조회
+    content = request.form['content'] # 폼에서 댓글 내용 가져오기
+    if content: # 내용이 비어있지 않다면
+        # 새로운 Comment 객체 생성. post_id와 author를 설정합니다.
+        comment = Comment(content=content, post_id=post.id, author=current_user)
+        db.session.add(comment) # 데이터베이스 세션에 추가
+        db.session.commit() # 변경사항 커밋
+    return redirect(url_for('view_post', post_id=post_id)) # 댓글 작성 후 해당 게시글 상세 페이지로 리다이렉트
+
+# 일반 게시판 라우트 ('/bulletin')
+@app.route('/bulletin')
+def bulletin_board():
+    # 모든 일반 게시글을 작성일 기준으로 내림차순 정렬하여 가져옵니다.
+    posts = BulletinPost.query.order_by(BulletinPost.date_posted.desc()).all()
+    # 'bulletin_board.html' 템플릿을 렌더링하고, 게시글 목록을 전달합니다.
+    return render_template('bulletin_board.html', posts=posts)
+
+# 새 일반 게시글 작성 라우트 ('/bulletin/new')
+@app.route('/bulletin/new', methods=['GET', 'POST'])
+@login_required # 로그인된 사용자만 접근 가능하도록 합니다.
+def new_bulletin_post():
+    # 요청 방식이 POST일 경우 (폼 제출)
+    if request.method == 'POST':
+        title = request.form['title'] # 폼에서 제목 가져오기
+        content = request.form['content'] # 폼에서 내용 가져오기
+        # 새로운 BulletinPost 객체 생성. author는 현재 로그인된 사용자(current_user)로 자동 설정됩니다.
+        post = BulletinPost(title=title, content=content, author=current_user)
+        db.session.add(post) # 데이터베이스 세션에 추가
+        db.session.commit() # 변경사항 커밋
+        return redirect(url_for('bulletin_board')) # 게시글 작성 후 일반 게시판으로 리다이렉트
+    # 요청 방식이 GET일 경우 (페이지 로드)
+    return render_template('new_bulletin_post.html') # 새 게시글 작성 폼 렌더링
+
+# 일반 게시글 상세 보기 라우트 ('/bulletin/<int:post_id>')
+@app.route('/bulletin/<int:post_id>')
+def view_bulletin_post(post_id):
+    # post_id에 해당하는 게시글을 데이터베이스에서 조회합니다.
+    # 게시글이 없으면 404 Not Found 오류를 발생시킵니다.
+    post = BulletinPost.query.get_or_404(post_id)
+    # 'view_bulletin_post.html' 템플릿을 렌더링하고, 해당 게시글 객체를 전달합니다.
+    return render_template('view_bulletin_post.html', post=post)
+
+# 일반 게시글에 댓글 추가 라우트 ('/bulletin/<int:post_id>/comment')
+@app.route('/bulletin/<int:post_id>/comment', methods=['POST'])
+@login_required # 로그인된 사용자만 댓글 작성 가능하도록 합니다.
+def add_bulletin_comment(post_id):
+    post = BulletinPost.query.get_or_404(post_id) # post_id에 해당하는 게시글 조회
+    content = request.form['content'] # 폼에서 댓글 내용 가져오기
+    if content: # 내용이 비어있지 않다면
+        # 새로운 Comment 객체 생성. bulletin_post_id와 author를 설정합니다.
+        comment = Comment(content=content, bulletin_post_id=post.id, author=current_user)
+        db.session.add(comment) # 데이터베이스 세션에 추가
+        db.session.commit() # 변경사항 커밋
+    return redirect(url_for('view_bulletin_post', post_id=post_id)) # 댓글 작성 후 해당 게시글 상세 페이지로 리다이렉트
+
+# 건물 정보 페이지 라우트 ('/building/<int:id>')
+@app.route('/building/<int:id>')
+def building_page(id):
+    # 건물 ID의 유효성 검사 (예: 1부터 99까지의 ID만 유효)
+    if not (1 <= id <= 99):
+        return "존재하지 않는 건물입니다.", 404 # 유효하지 않은 ID일 경우 404 오류 반환
+    # 건물 ID에 해당하는 템플릿 파일 이름 생성 (예: ID가 1이면 'building/B01.html')
+    template_name = f'building/B{id:02d}.html'
+    # 해당 템플릿을 렌더링합니다.
+    return render_template(template_name)
+
+# Gemini 검색 라우트 ('/gemini-search')
+@app.route('/gemini-search', methods=['POST'])
+def gemini_search():
+    data = request.get_json() # 클라이언트로부터 JSON 형식의 요청 본문 가져오기
+    query = data.get('query') # 요청 본문에서 'query' 값 추출
+    try:
+        # Gemini 모델을 사용하여 쿼리에 대한 콘텐츠를 생성합니다.
+        response = model.generate_content(query)
+        gemini_results = response.text # 생성된 텍스트 결과 가져오기
+    except Exception as e:
+        # Gemini API 호출 중 오류 발생 시 오류 메시지 생성
+        gemini_results = f"Gemini 검색 오류: {str(e)}"
+    # 검색 결과를 JSON 형태로 클라이언트에 반환합니다.
+    return jsonify({'result': gemini_results})
+
+# 애플리케이션 컨텍스트 내에서 데이터베이스 테이블 생성
+# 이 블록은 애플리케이션이 시작될 때 한 번만 실행되며, 정의된 모든 모델에 따라 데이터베이스 테이블을 생성합니다.
+# 이미 테이블이 존재하면 아무것도 하지 않습니다.
+with app.app_context():
+    db.create_all()
+
+# 애플리케이션 실행
+# 이 스크립트가 직접 실행될 때만 Flask 개발 서버를 시작합니다.
+# debug=True는 개발 모드를 활성화하여 코드 변경 시 서버가 자동으로 재로드되고, 디버깅 정보가 제공됩니다.
+if __name__ == '__main__':
+    app.run(debug=True)
+```
