@@ -48,7 +48,8 @@ myweb/
 ```
 
 # templates 
-- board.html
+### board.html 
+- 문의 게시판
 ```
 <!DOCTYPE html>
 <html>
@@ -139,7 +140,7 @@ myweb/
 </html>
 ```
 
-- bulletin_board.html
+### bulletin_board.html
 ```
 <!DOCTYPE html>
 <html lang="ko"> <head>
@@ -243,7 +244,7 @@ myweb/
 </html>
 ```
 
-- index.html 
+### index.html 
 ```
 <!DOCTYPE html>
 <html lang="ko"> <head>
@@ -479,7 +480,8 @@ myweb/
 
 </html>
 ```
-- login.html 
+### login.html 
+- 로그인
 ```
 <!DOCTYPE html>
 <html>
@@ -542,7 +544,7 @@ myweb/
 
 ```
 
-- new_bulletin_post.html
+### new_bulletin_post.html
 
 ```
 <!DOCTYPE html>
@@ -623,7 +625,7 @@ myweb/
 </html>
 
 ```
-- new_post.html
+### new_post.html
 ```
 <!DOCTYPE html>
 <html lang="ko"> <head>
@@ -916,7 +918,7 @@ myweb/
 
 ```
 
-# view.html
+### view.html
 ```
 <!DOCTYPE html>
 <html>
