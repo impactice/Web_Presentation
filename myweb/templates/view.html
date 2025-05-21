@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ post.title }}</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='comments.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='view.css') }}">
+</head>
+<body>
+    <div class="view-container">
+        <h1 class="post-title">{{ post.title }}</h1>
+        <div class="post-meta">
+            <span class="meta-line">작성자: {{ post.author.username }}</span>
+            <span class="meta-line">작성일: {{ post.date_posted.strftime('%Y-%m-%d %H:%M:%S') }}</span>
+        </div>
+
+        <div class="content">
+            {{ post.content|replace('\n', '<br>')|safe }}
+        </div>
+
+        <p><a href="{{ url_for('board') }}" class="back-link">← 게시판으로 돌아가기</a></p>
+
+        {% if current_user.is_authenticated and current_user == post.author %}
+            <div class="post-actions">
+                <a href="{{ url_for('edit_post', post_id=post.id) }}">수정</a> |
+                <a href="{{ url_for('delete_post', post_id=post.id) }}" onclick="return confirm('정말로 삭제하시겠습니까?')">삭제</a>
+            </div>
+        {% endif %}
+
+        <h2 class="comments-title">댓글</h2> {# 클래스 추가 #}
+        {% if post.comments %}
+            <ul class="comment-list">
+                {% for comment in post.comments %}
+                    <li>
+                        <strong>{{ comment.author.username }}</strong> ({{ comment.date_posted.strftime('%Y-%m-%d %H:%M:%S') }}):
+                        <div class="comment-content">
+                            {{ comment.content|replace('\n', '<br>')|safe }}
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="no-comments-message">아직 댓글이 없습니다.</p> {# 클래스 추가 #}
+        {% endif %}
+
+        {% if current_user.is_authenticated %}
+            <h3 class="comment-form-title">댓글 작성</h3> {# 클래스 추가 #}
+            <form method="POST" action="{{ url_for('add_comment', post_id=post.id) }}" class="comment-form">
+                <textarea name="content" rows="5" required></textarea><br>
+                <input type="submit" value="댓글 작성">
+            </form>
+        {% else %}
+            <p><a href="{{ url_for('login') }}">로그인</a> 후 댓글을 작성할 수 있습니다.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
