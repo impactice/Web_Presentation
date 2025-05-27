@@ -164,9 +164,48 @@ body {
 }
 ```
 
+# 데이터베이스 구축  
+## app.py 수정
+```
+from flask import Flask, render_template # render_template을 import 합니다.
+from flask_sqlalchemy import SQLAlchemy
 
+# 1. Flask 애플리케이션 인스턴스 생성
+app = Flask(__name__, template_folder='templates') 
 
+# 2. SQLALCHEMY_DATABASE_URI 설정
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'  # SQLite 데이터베이스 사용
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # 비활성화하여 메모리 오버헤드 줄이기 
 
+# 3. SQLAlchemy 인스턴스 초기화
+db = SQLAlchemy(app)
+
+# 4. 데이터베이스 모델 정의 
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+
+    def __repr__(self):
+        return f'<User {self.username}>'
+
+# 5. 애플리케이션 컨텍스트 내에서 데이터베이스 테이블 생성
+with app.app_context():
+    db.create_all()
+
+# 6. 기본 경로('/')에 대한 라우트 정의 (이전 코드에서 추가)
+@app.route('/')
+def home():
+    # 여기서 데이터베이스에서 사용자 정보를 가져와 index.html에 전달할 수 있습니다.
+    users = User.query.all() # 모든 User 객체를 가져옴
+    return render_template('index.html', users=users) # templates 폴더의 index.html을 렌더링합니다.
+
+# 7. 애플리케이션 실행
+if __name__ == '__main__':
+    app.run(debug=True)  # 디버깅 모드에서 애플리케이션 실행
+    #app.run(host='0.0.0.0', port=8000, debug=True)  # 호스트와 포트를 지정하여 실행할 경우
+
+```
 
 
 
