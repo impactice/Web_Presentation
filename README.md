@@ -88,6 +88,7 @@ myweb/
 # 웹 페이지 구성하기
 
 ## index.html 
+- 메인 페이지
 ```
 <!DOCTYPE html>
 <html lang="ko">
@@ -209,6 +210,7 @@ if __name__ == '__main__':
 
 # 회원 관리 (로그인 페이지)
 ## login.html (추가) 
+- 로그인 페이지 
 ```
 <!DOCTYPE html>
 <html>
@@ -231,6 +233,7 @@ if __name__ == '__main__':
 ```
 
 ## register.html (추가) 
+- 회원가입 페이지  
 ```
 <!DOCTYPE html>
 <html>
@@ -254,6 +257,7 @@ if __name__ == '__main__':
 
 ## .env 파일 만들기 
 ### SECRET_KEY 생성하기 
+- 터미널에서 python을 치면 파이썬 터미널이 열리는 데 이 코드 입력하면 랜덤으로 키를 생성해줌 
 ```
 import secrets
 import string
@@ -544,6 +548,7 @@ if __name__ == '__main__':
     #app.run(host='0.0.0.0', port=8000, debug=True)  # 호스트와 포트를 지정하여 실행할 경우
 ```
 
+# 게시글, 문의 게시글과 건물 추가 등 
 ## board.html 
 ```
 <!DOCTYPE html>
