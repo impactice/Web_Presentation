@@ -304,7 +304,7 @@ print(secret_key)
 </html>
 ```
 
-## style.css 
+## style.css (수정)
 ```
 /* 기본 스타일 초기화 */
 body,
