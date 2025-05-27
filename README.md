@@ -475,8 +475,6 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-# ... (이하 나머지 코드는 동일) ...
-
 # 4. 데이터베이스 모델 정의
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -515,7 +513,6 @@ def register():
     return render_template('register.html')
 
 # 로그인 페이지
-# 로그인 페이지
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -541,7 +538,7 @@ with app.app_context():
     db.create_all()
 
 
-# 7. 애플리케이션 실행
+# 6. 애플리케이션 실행
 if __name__ == '__main__':
     app.run(debug=True)
     #app.run(host='0.0.0.0', port=8000, debug=True)  # 호스트와 포트를 지정하여 실행할 경우
