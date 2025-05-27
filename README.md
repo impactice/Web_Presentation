@@ -85,6 +85,104 @@ myweb/
 - `instance` 폴더에는 SQLite 데이터베이스 파일이 저장됩니다.
 - `.env` 파일은 민감한 API 키와 같은 환경 변수를 안전하게 관리하는 데 사용됩니다.
 
+## index.html 
+```
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <title>회원 관리 및 일반 게시판</title>
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="logo">경성대학교 꿀팁!</div>
+    </header>
+
+</body>
+
+</html>
+```
+ 
+## app.py 
+```
+from flask import Flask, render_template # render_template을 import 합니다.
+
+# 1. Flask 애플리케이션 인스턴스 생성
+app = Flask(__name__, template_folder='templates')
+
+# 2. 기본 경로('/')에 대한 라우트 정의
+@app.route('/')
+def home():
+    return render_template('index.html') # templates 폴더의 index.html을 렌더링합니다.
+
+# 애플리케이션 실행
+if __name__ == '__main__':
+    app.run(debug=True)  # 디버깅 모드에서 애플리케이션 실행
+    #app.run(host='0.0.0.0', port=8000, debug=True)  # 호스트와 포트를 지정하여 실행할 경우
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 전체 코드 
 # static 
 
 ### board.css 
