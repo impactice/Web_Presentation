@@ -269,8 +269,40 @@ secret_key = ''.join(secrets.choice(alphabet) for i in range(50)) # 50자리 (�
 print(secret_key)
 ```
 
+## index.html (수정) 
+```
+<!DOCTYPE html>
+<html lang="ko">
 
+<head>
+    <meta charset="UTF-8">
+    <title>회원 관리 및 일반 게시판</title> 
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
 
+<body>
+    <header class="main-header">
+        <div class="logo">경성대학교 꿀팁!</div>
+        <nav class="user-auth">
+            {% if current_user.is_authenticated %}
+            <span>
+                {% if current_user.profile_picture %}
+                <img src="{{ current_user.profile_picture }}" alt="프로필 사진" class="profile-pic">
+                {% endif %}
+                {{ current_user.username }}님 환영합니다!
+            </span>
+            <a href="{{ url_for('logout') }}">로그아웃</a>
+            {% else %}
+            <a href="{{ url_for('login') }}">로그인</a>
+            <a href="{{ url_for('register') }}">회원 가입</a>
+            {% endif %}
+        </nav>
+    </header>
+
+</body>
+
+</html>
+```
 
 
 
