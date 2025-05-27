@@ -85,6 +85,8 @@ myweb/
 - `instance` 폴더에는 SQLite 데이터베이스 파일이 저장됩니다.
 - `.env` 파일은 민감한 API 키와 같은 환경 변수를 안전하게 관리하는 데 사용됩니다.
 
+# 웹 페이지 구성하기
+
 ## index.html 
 ```
 <!DOCTYPE html>
@@ -92,7 +94,8 @@ myweb/
 
 <head>
     <meta charset="UTF-8">
-    <title>회원 관리 및 일반 게시판</title>
+    <title>회원 관리 및 일반 게시판</title> 
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
@@ -123,8 +126,43 @@ if __name__ == '__main__':
     #app.run(host='0.0.0.0', port=8000, debug=True)  # 호스트와 포트를 지정하여 실행할 경우
 ```
 
+## style.css 
+```
+/* 기본 스타일 초기화 */
+body,
+h1,
+h2,
+h3,
+p,
+ul,
+li {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f4f8; /* 밝은 회색 배경 */
+    color: #003060;
+    line-height: 1.6;
+}
 
+/* 헤더 스타일 */
+.main-header {
+    background-color: #004080; /* 메인 파란색 */
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+```
 
 
 
