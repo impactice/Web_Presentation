@@ -252,7 +252,22 @@ if __name__ == '__main__':
 </html>
 ```
 
+## .env 파일 만들기 
+### SECRET_KEY 생성하기 
+```
+import secrets
+import string
 
+# 32바이트(256비트)의 무작위 문자열 생성
+# 기본적으로 URL-safe text를 생성하지만, 더 다양한 문자를 포함할 수도 있습니다.
+# secret_key = secrets.token_urlsafe(32)
+
+# 더 복잡한 키를 위해 대소문자, 숫자, 특수문자를 포함할 수 있습니다.
+alphabet = string.ascii_letters + string.digits + string.punctuation
+secret_key = ''.join(secrets.choice(alphabet) for i in range(50)) # 50자리 (더 길게 해도 됨)
+
+print(secret_key)
+```
 
 
 
