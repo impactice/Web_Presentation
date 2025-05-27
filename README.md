@@ -547,6 +547,277 @@ if __name__ == '__main__':
     #app.run(host='0.0.0.0', port=8000, debug=True)  # 호스트와 포트를 지정하여 실행할 경우
 ```
 
+## board.html 
+```
+<!DOCTYPE html>
+<html>
+<head>
+    <title>문의 게시판</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='board.css') }}">
+
+</head>
+<body>
+    <div class="board-header">
+    <a href="{{ url_for('index') }}" class="logo-link">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="홈으로" class="logo-img">
+    </a>
+    <h1>문의 게시판</h1>
+    <div class="header-actions">
+        <a href="{{ url_for('new_post') }}" class="action-button">새 글 작성</a>
+        <a href="{{ url_for('logout') }}" class="action-button">로그아웃</a>
+    </div>
+</div>
+
+    <ul class="post-list">
+        {% for post in posts %}
+        <li class="post-item">
+            <div class="post-info">
+                <a href="{{ url_for('view_post', post_id=post.id) }}" class="post-title">{{ post.title }}</a>
+                <span class="post-meta">({{ post.author.username }}, {{ post.date_posted.strftime('%Y-%m-%d %H:%M') }})</span>
+            </div>
+            {% if current_user == post.author %}
+            <div class="post-actions">
+                <a href="{{ url_for('edit_post', post_id=post.id) }}">수정</a>
+                <a href="{{ url_for('delete_post', post_id=post.id) }}">삭제</a>
+            </div>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+```
+
+## bulletin_board.html
+```
+<!DOCTYPE html>
+<html lang="ko"> 
+    <link rel="stylesheet" href="{{ url_for('static', filename='bulletin_board.css') }}">
+<head>
+    <meta charset="UTF-8">
+    <title>게시판</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>게시판</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>제목</th>
+                    <th>작성일</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for post in posts %}
+                <tr>
+                    <td><a href="{{ url_for('view_bulletin_post', post_id=post.id) }}">{{ post.title }}</a></td>
+                    <td>{{ post.date_posted.strftime('%Y-%m-%d %H:%M') }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="2">게시글이 없습니다.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% if current_user.is_authenticated %}
+        <a href="{{ url_for('new_bulletin_post') }}" class="button">새 글 쓰기</a>
+        {% endif %}
+        <a href="{{ url_for('index') }}">홈으로</a>
+    </div>
+</body>
+</html>
+```
+
+## edit_post.html 
+```
+<!DOCTYPE html>
+<html>
+<head>
+    <title>글 수정</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>글 수정</h1>
+    <form method="POST">
+        <label for="title">제목:</label><br>
+        <input type="text" id="title" name="title" value="{{ post.title }}" required><br><br>
+        <label for="content">내용:</label><br>
+        <textarea id="content" name="content" rows="10" cols="80" required>{{ post.content }}</textarea><br><br>
+        <input type="submit" value="수정">
+    </form>
+    <p><a href="{{ url_for('view_post', post_id=post.id) }}">돌아가기</a></p>
+</body>
+</html>
+```
+
+## new_bulletin_post.html 
+```
+<!DOCTYPE html>
+<html lang="ko"> 
+    <link rel="stylesheet" href="{{ url_for('static', filename='bulletin_board.css') }}">
+<head>
+    <meta charset="UTF-8">
+    <title>새 글 쓰기</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>새 글 쓰기</h1>
+        <form method="POST">
+            <label for="title">제목:</label>
+            <input type="text" name="title" required><br>
+            <label for="content">내용:</label>
+            <textarea name="content" rows="10" required></textarea><br>
+            <input type="submit" value="저장">
+        </form>
+        <a href="{{ url_for('bulletin_board') }}">게시판으로 돌아가기</a>
+    </div>
+</body>
+</html>
+```
+
+## new_post.html 
+```
+<!DOCTYPE html>
+<html>
+<head>
+    <title>새 글 작성</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>새 글 작성</h1>
+    <form method="POST">
+        <label for="title">제목:</label><br>
+        <input type="text" id="title" name="title" required><br><br>
+        <label for="content">내용:</label><br>
+        <textarea id="content" name="content" rows="10" cols="80" required></textarea><br><br>
+        <input type="submit" value="작성">
+    </form>
+    <p><a href="{{ url_for('board') }}">게시판으로 돌아가기</a></p>
+</body>
+</html>
+```
+
+## view_bulletin_post.html 
+```
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{ post.title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='bulletin_board.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='comments.css') }}"> </head>
+
+<body>
+    <div class="container">
+        <h1>{{ post.title }}</h1>
+        <p>작성일: {{ post.date_posted.strftime('%Y-%m-%d %H:%M') }}</p>
+        <div class="content">
+            {{ post.content }}
+        </div>
+        <a href="{{ url_for('bulletin_board') }}">게시판으로 돌아가기</a>
+
+        <hr>
+
+        <div class="comments-section">
+            <h2>댓글</h2>
+            {% if post.comments %}
+                <ul>
+                    {% for comment in post.comments %}
+                    <li>
+                        <strong>{{ comment.author.username }}</strong> - 
+                        <small>{{ comment.date_posted.strftime('%Y-%m-%d %H:%M') }}</small><br>
+                        {{ comment.content }}
+                    </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>댓글이 없습니다.</p>
+            {% endif %}
+        </div>
+
+        <hr>
+
+        {% if current_user.is_authenticated %}
+        <div class="comment-form">
+            <h3>댓글 작성</h3>
+            <form action="{{ url_for('add_bulletin_comment', post_id=post.id) }}" method="POST">
+                <textarea name="content" rows="4" cols="50" placeholder="댓글 내용을 입력하세요." required></textarea><br>
+                <button type="submit">작성</button>
+            </form>
+        </div>
+        {% else %}
+        <p>댓글을 작성하려면 <a href="{{ url_for('login') }}">로그인</a>하세요.</p>
+        {% endif %}
+    </div>
+</body>
+
+</html>
+```
+
+## view.html 
+```
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ post.title }}</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='comments.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='view.css') }}">
+</head>
+<body>
+    <div class="view-container">
+        <h1 class="post-title">{{ post.title }}</h1>
+        <div class="post-meta">
+            <span class="meta-line">작성자: {{ post.author.username }}</span>
+            <span class="meta-line">작성일: {{ post.date_posted.strftime('%Y-%m-%d %H:%M:%S') }}</span>
+        </div>
+
+        <div class="content">
+            {{ post.content|replace('\n', '<br>')|safe }}
+        </div>
+
+        <p><a href="{{ url_for('board') }}" class="back-link">← 게시판으로 돌아가기</a></p>
+
+        {% if current_user.is_authenticated and current_user == post.author %}
+            <div class="post-actions">
+                <a href="{{ url_for('edit_post', post_id=post.id) }}">수정</a> |
+                <a href="{{ url_for('delete_post', post_id=post.id) }}" onclick="return confirm('정말로 삭제하시겠습니까?')">삭제</a>
+            </div>
+        {% endif %}
+
+        <h2 class="comments-title">댓글</h2> {# 클래스 추가 #}
+        {% if post.comments %}
+            <ul class="comment-list">
+                {% for comment in post.comments %}
+                    <li>
+                        <strong>{{ comment.author.username }}</strong> ({{ comment.date_posted.strftime('%Y-%m-%d %H:%M:%S') }}):
+                        <div class="comment-content">
+                            {{ comment.content|replace('\n', '<br>')|safe }}
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="no-comments-message">아직 댓글이 없습니다.</p> {# 클래스 추가 #}
+        {% endif %}
+
+        {% if current_user.is_authenticated %}
+            <h3 class="comment-form-title">댓글 작성</h3> {# 클래스 추가 #}
+            <form method="POST" action="{{ url_for('add_comment', post_id=post.id) }}" class="comment-form">
+                <textarea name="content" rows="5" required></textarea><br>
+                <input type="submit" value="댓글 작성">
+            </form>
+        {% else %}
+            <p><a href="{{ url_for('login') }}">로그인</a> 후 댓글을 작성할 수 있습니다.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
+``` 
+
+
+
 
 
 
