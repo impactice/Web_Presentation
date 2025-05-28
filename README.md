@@ -48,37 +48,43 @@ python get-pip.py
 # 파일 전체 흐름
 ```
 myweb/
-├── app.py                  # Flask 애플리케이션의 핵심 로직 (백엔드)
-├── .env                    # 환경 변수 (API 키, 시크릿 키 등)
-├── templates/              # HTML 템플릿 파일 (프론트엔드)
-│   ├── index.html          # 메인 페이지
-│   ├── bulletin_board.html # 일반 게시판 목록
-│   ├── edit_post.html      # 문의 게시글 수정 폼
-│   ├── login.html          # 로그인 페이지
+├── app.py                     # Flask 애플리케이션의 핵심 로직 (백엔드)
+├── .env                       # 환경 변수 (API 키, 시크릿 키 등)
+├── templates/                 # HTML 템플릿 파일 (프론트엔드)
+│   ├── index.html             # 메인 페이지
+│   ├── bulletin_board.html    # 일반 게시판 목록
+│   ├── edit_post.html         # 문의 게시글 수정 폼
+│   ├── login.html             # 로그인 페이지
 │   ├── new_bulletin_post.html # 일반 게시글 작성 폼
-│   ├── new_post.html       # 문의 게시글 작성 폼
-│   ├── register.html       # 회원가입 페이지
-│   ├── view.html           # 문의 게시글 상세 보기
-│   ├── view_bulletin_post.html # 일반 게시글 상세 보기
-│   ├── building/           # 건물 정보 페이지
+│   ├── new_post.html          # 문의 게시글 작성 폼
+│   ├── register.html          # 회원가입 페이지
+│   ├── view.html              # 문의 게시글 상세 보기
+│   ├── view_bulletin_post.html# 일반 게시글 상세 보기
+│   ├── building/              # 건물 정보 페이지
 │   │   ├── B01.html
 │   │   ├── B26.html
 │   │   └── B27.html
-│   └── board.html          # 문의 게시판 목록
-├── static/                 # 정적 파일 (CSS, JavaScript, 이미지)
-│   ├── buildingC/          # 건물별 CSS
+│   └── board.html             # 문의 게시판 목록
+├── static/                    # 정적 파일 (CSS, JavaScript, 이미지)
+│   ├── buildingC/             # 건물별 CSS
 │   │   └── B01.css
-│   ├── images/             # 이미지 파일
+│   ├── images/                # 이미지 파일
 │   │   └── ...
-│   ├── board.css           # 문의 게시판 스타일
-│   ├── bulletin_board.css  # 일반 게시판 스타일
-│   ├── comments.css        # 댓글 스타일
-│   ├── image_slider.css    # 이미지 슬라이더 스타일
-│   ├── image_slider.js     # 이미지 슬라이더 JavaScript
-│   ├── style.css           # 전역 스타일
-│   └── view.css            # 게시글 상세 보기 스타일
-└── instance/               # 데이터베이스 파일
-    └── database.db         # SQLite 데이터베이스 파일
+│   ├── board.css              # 문의 게시판 스타일
+│   ├── bulletin_board.css     # 일반 게시판 스타일
+│   ├── comments.css           # 댓글 스타일
+│   ├── edit_post.css          # 게시글 수정 폼 스타일
+│   ├── image_slider.css       # 이미지 슬라이더 스타일
+│   ├── image_slider.js        # 이미지 슬라이더 JavaScript
+│   ├── login.css              # 로그인 페이지 스타일
+│   ├── new_bulletin_post.css  # 일반 게시글 작성 폼 스타일
+│   ├── new_post.css           # 문의 게시글 작성 폼 스타일 (이전 정보에 있었으나, 제공된 파일에는 없음. 하지만 기존 구조에 따라 추가)
+│   ├── register.css           # 회원가입 페이지 스타일 (이전 정보에 있었으나, 제공된 파일에는 없음. 하지만 기존 구조에 따라 추가)
+│   ├── style.css              # 전역 스타일 (이전 정보에 있었으나, 제공된 파일에는 없음. 하지만 기존 구조에 따라 추가)
+│   ├── view.css               # 게시글 상세 보기 스타일 (이전 정보에 있었으나, 제공된 파일에는 없음. 하지만 기존 구조에 따라 추가)
+│   └── view_bulletin_post.css # 일반 게시글 상세 보기 스타일 (이전 정보에 있었으나, 제공된 파일에는 없음. 하지만 기존 구조에 따라 추가)
+└── instance/                  # 데이터베이스 파일
+    └── database.db            # SQLite 데이터베이스 파일
 ```
 - `app.py`는 모든 백엔드 로직을 처리하며, `templates` 폴더의 HTML 파일들을 렌더링하여 사용자에게 보여줍니다.
 - `static` 폴더는 웹 페이지의 디자인과 동적인 요소를 담당하는 CSS, JavaScript, 이미지 파일들을 포함합니다.
