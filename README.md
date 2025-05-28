@@ -556,6 +556,7 @@ if __name__ == '__main__':
 
 # 게시글, 문의 게시글과 건물 추가 등 
 ## board.html 
+- 문의 게시판의 게시글 목록을 보여줌 
 ```
 <!DOCTYPE html>
 <html>
@@ -595,15 +596,16 @@ if __name__ == '__main__':
 </body>
 ```
 
-## bulletin_board.html
+## bulletin_board.html 
+- 일반 게시판의 게시글 목록
 ```
 <!DOCTYPE html>
 <html lang="ko"> 
-    <link rel="stylesheet" href="{{ url_for('static', filename='bulletin_board.css') }}">
+    
 <head>
     <meta charset="UTF-8">
     <title>게시판</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='bulletin_board.css') }}">
 </head>
 <body>
     <div class="container">
@@ -636,12 +638,13 @@ if __name__ == '__main__':
 ```
 
 ## edit_post.html 
+- 문의 게시글을 수정할 수 있는 폼
 ```
 <!DOCTYPE html>
 <html>
 <head>
     <title>글 수정</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='edit_post.css') }}">
 </head>
 <body>
     <h1>글 수정</h1>
@@ -658,14 +661,14 @@ if __name__ == '__main__':
 ```
 
 ## new_bulletin_post.html 
+- 일반 게시판에 새 글을 작성하는 폼
 ```
 <!DOCTYPE html>
 <html lang="ko"> 
-    <link rel="stylesheet" href="{{ url_for('static', filename='bulletin_board.css') }}">
 <head>
     <meta charset="UTF-8">
     <title>새 글 쓰기</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='new_bulletin_board.css') }}">
 </head>
 <body>
     <div class="container">
@@ -684,12 +687,13 @@ if __name__ == '__main__':
 ```
 
 ## new_post.html 
+- 문의 게시판에 새 글을 작성하는 폼
 ```
 <!DOCTYPE html>
 <html>
 <head>
     <title>새 글 작성</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='new_post.css') }}">
 </head>
 <body>
     <h1>새 글 작성</h1>
@@ -706,6 +710,7 @@ if __name__ == '__main__':
 ```
 
 ## view_bulletin_post.html 
+- 일반 게시판 게시글의 상세 내용과 댓글 목록, 그리고 댓글 작성 폼
 ```
 <!DOCTYPE html>
 <html lang="ko">
@@ -713,9 +718,8 @@ if __name__ == '__main__':
 <head>
     <meta charset="UTF-8">
     <title>{{ post.title }}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='bulletin_board.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='comments.css') }}"> </head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='view_bulletin_post.css') }}">
+</head>
 
 <body>
     <div class="container">
@@ -765,6 +769,8 @@ if __name__ == '__main__':
 ```
 
 ## view.html 
+- 문의 게시판 게시글의 상세 내용과 댓글 목록, 그리고 댓글 작성 폼
+- 게시글 작성자에게는 수정/삭제 버튼을 보여줌 
 ```
 <!DOCTYPE html>
 <html>
