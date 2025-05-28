@@ -1459,7 +1459,7 @@ p a:hover {
 }
 ```
 
-## new_bulletin_post.css 
+## new_bulletin_post.css (추가) 
 ```
 /* 컨테이너 스타일 */
 .container {
@@ -1531,7 +1531,7 @@ p a:hover {
 }
 ```
 
-## new_post.css 
+## new_post.css (추가) 
 ```
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -1609,7 +1609,7 @@ p a:hover {
 }
 ```
 
-## register.css 
+## register.css (추가) 
 ```
 /* register.html용 스타일 */
 body {
@@ -1684,7 +1684,7 @@ p a:hover {
 }
 ```
 
-## view.css 
+## view.css (추가) 
 ```
 body {
     font-family: sans-serif;
@@ -1785,7 +1785,7 @@ body {
     background-color: #0056b3;
 }
 ```
-## view_bulletin_post.css
+## view_bulletin_post.css (추가) 
 ```
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -1928,5 +1928,25 @@ body {
     background-color: #0056b3;
 }
 ```
+
+## index.html (수정)   
+```
+
+```
+## app.py (수정)  
+```
+
+```
+
+## style.css (수정) 
+```
+
+```
+
+
+
+
+
+
 
 
