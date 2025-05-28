@@ -1931,16 +1931,578 @@ body {
 
 ## index.html (수정)   
 ```
+<!DOCTYPE html>
+<html lang="ko">
 
+<head>
+    <meta charset="UTF-8">
+    <title>회원 관리 및 일반 게시판</title> 
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='image_slider.css') }}">
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="logo">경성대학교 꿀팁!</div>
+        <nav class="user-auth">
+            {% if current_user.is_authenticated %}
+            <span>
+                {% if current_user.profile_picture %}
+                <img src="{{ current_user.profile_picture }}" alt="프로필 사진" class="profile-pic">
+                {% endif %}
+                {{ current_user.username }}님 환영합니다!
+            </span>
+            <a href="{{ url_for('logout') }}">로그아웃</a>
+            <a href="{{ url_for('board') }}" class="board-link">문의 게시판</a>
+            {% else %}
+            <a href="{{ url_for('login') }}">로그인</a>
+            <a href="{{ url_for('register') }}">회원 가입</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <div class="main-content-wrapper">
+        <div class="left-space board-preview">
+            <h2>최근 게시글</h2>
+            <ul>
+                {% for post in recent_posts %}
+                <li><a href="{{ url_for('view_bulletin_post', post_id=post.id) }}">{{ post.title }}</a></li>
+                {% else %}
+                <li>최근 게시글이 없습니다.</li>
+                {% endfor %}
+            </ul>
+            <a href="{{ url_for('bulletin_board') }}" class="view-all-board">게시판 전체 보기</a>
+        </div>
+
+        <div class="middle-space">
+            <div class="slider-image-slider-container">
+                <div class="slider-image-slider">
+                    <img src="{{ url_for('static', filename='images/school.png') }}" alt="학교 이미지 1">
+                    <img src="{{ url_for('static', filename='images/map.png') }}" alt="학교 지도 실물">
+                    <img src="{{ url_for('static', filename='images/lib_in.png') }}" alt="부산 도시 이미지">
+                </div>
+                <button class="slider-prev-button">&lt;</button>
+                <button class="slider-next-button">&gt;</button>
+            </div>
+        </div>
+        <div class="right-space">
+            <h2>건물 목록</h2>
+            <ul class="building-list">
+                <li><a href="/building/1">1호관 (한성관)</a></li>
+                <li><a href="/building/2">2호관 (자연관)</a></li>
+                <li><a href="/building/3">3호관 (예술관)</a></li>
+                <li><a href="/building/4">4호관 (상학관)</a></li>
+                <li><a href="/building/5">5호관 (사회관)</a></li>
+                <li><a href="/building/6">6호관 (인문관)</a></li>
+                <li><a href="/building/7">7호관 (제 1공학관)</a></li>
+                <li><a href="/building/8">8호관 (제 2공학관)</a></li>
+                <li><a href="/building/9">9호관 (약*과학관)</a></li>
+                <li><a href="/building/10">10호관 (산학협력관)</a></li>
+                <li><a href="/building/11">11호관 (나이팅게일관)</a></li>
+                <li><a href="/building/12">12호관 (멀티미디어관)</a></li>
+                <li><a href="/building/22">22호관 (문화관)</a></li>
+                <li><a href="/building/23">23호관 (제1 학생회관)</a></li>
+                <li><a href="/building/24">24호관 (제2 학생회관)</a></li>
+                <li><a href="/building/25">25호관 (용무관)</a></li>
+                <li><a href="/building/26">26호관 (멀티미디어정보관)</a></li>
+                <li><a href="/building/27">27호관 (중앙도서관)</a></li>
+                <li><a href="/building/28">28호관 (제1 누리생활관)</a></li>
+                <li><a href="/building/29">29호관 (제2 누리생활관)</a></li>
+                <li><a href="/building/30">30호관 (건학기념관)</a></li>
+            </ul>
+        </div>
+    </div> 
+    <div class="main-section" style="display:none;"></div>
+
+    <script src="{{ url_for('static', filename='image_slider.js') }}"></script>
+</body>
+
+</html>
 ```
+
+## login.html (수정)
+```
+<!DOCTYPE html>
+<html>
+<head>
+    <title>로그인</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='login.css') }}">
+</head>
+<body>
+    <h1>로그인</h1>
+    <form method="POST">
+        <label for="username">사용자 이름:</label><br>
+        <input type="text" id="username" name="username" required><br><br>
+        <label for="password">비밀번호:</label><br>
+        <input type="password" id="password" name="password" required><br><br>
+        <input type="submit" value="로그인">
+    </form>
+    <p>아직 계정이 없으신가요? <a href="{{ url_for('register') }}">회원 가입</a></p>
+</body>
+</html>
+```
+
+## register.html (수정) 
+```
+<!DOCTYPE html>
+<html>
+<head>
+    <title>회원 가입</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='register.css') }}">
+</head>
+<body>
+    <h1>회원 가입</h1>
+    <form method="POST">
+        <label for="username">사용자 이름:</label><br>
+        <input type="text" id="username" name="username" required><br><br>
+        <label for="password">비밀번호:</label><br>
+        <input type="password" id="password" name="password" required><br><br>
+        <input type="submit" value="가입">
+    </form>
+    <p>이미 계정이 있으신가요? <a href="{{ url_for('login') }}">로그인</a></p>
+</body>
+</html>
+```
+
 ## app.py (수정)  
 ```
+from flask import Flask, render_template, request, redirect, url_for
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
+import os
+from dotenv import load_dotenv
+from datetime import datetime # datetime 모듈을 임포트합니다.
 
+# .env 파일에서 환경 변수를 로드합니다.
+load_dotenv()
+
+app = Flask(__name__, template_folder='templates')
+# os.getenv()를 사용하여 환경 변수에서 SECRET_KEY를 가져옵니다.
+# app.config['SECRET_KEY'] = os.getenv('SECRET_KEY') or 'default_fallback_key' # SECRET_KEY 환경 변수가 없으면 'default_fallback_key'를 사용 (개발용)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# .env 파일에서 시크릿 키를 로드합니다.
+app.secret_key = os.getenv('SECRET_KEY')
+if not app.secret_key:
+    raise ValueError("SECRET_KEY 환경 변수가 설정되지 않았습니다. .env 파일을 확인하세요. (예: python -c \"import os; print(os.urandom(24).hex())\" 로 생성)")
+
+# SQLAlchemy 인스턴스 초기화
+db = SQLAlchemy(app)
+
+# Flask-Login 설정
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
+# 데이터베이스 모델 정의
+class User(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    password = db.Column(db.String(120), nullable=True)
+    # google_id 필드는 Google 로그인 전용이므로 제거하거나 nullable=True 유지
+    google_id = db.Column(db.String(120), unique=True, nullable=True)
+    # email 필드는 Google 로그인 외에도 사용될 수 있으므로 유지 (선택 사항)
+    email = db.Column(db.String(120), unique=True, nullable=True)
+    # profile_picture 필드는 Google 로그인 전용이므로 제거하거나 nullable=True 유지
+    profile_picture = db.Column(db.String(255), nullable=True)
+    registration_date = db.Column(db.DateTime, default=datetime.utcnow)
+    posts = db.relationship('Post', backref='user_posts', lazy=True)
+    bulletin_posts = db.relationship('BulletinPost', backref='user_bulletin_posts', lazy=True)
+
+    def __repr__(self):
+        return f'<User {self.username}>'
+
+class Post(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    date_posted = db.Column(db.DateTime, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    author = db.relationship('User', backref='written_posts', lazy=True)
+    comments = db.relationship('Comment', backref='post_comments', cascade='all, delete-orphan', lazy=True)
+
+    def __repr__(self):
+        return f'<Post {self.title}>'
+
+class BulletinPost(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    date_posted = db.Column(db.DateTime, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    author = db.relationship('User', backref='written_bulletin_posts', lazy=True)
+    comments = db.relationship('Comment', backref='bulletin_post_comments', cascade='all, delete-orphan', lazy=True)
+
+    def __repr__(self):
+        return f'<BulletinPost {self.title}>'
+
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.Text, nullable=False)
+    date_posted = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=True)
+    bulletin_post_id = db.Column(db.Integer, db.ForeignKey('bulletin_post.id'), nullable=True)
+    
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    
+    post = db.relationship('Post', backref='post_comments', foreign_keys=[post_id], lazy=True)
+    bulletin_post = db.relationship('BulletinPost', backref='bulletin_comments', foreign_keys=[bulletin_post_id], lazy=True)
+    
+    author = db.relationship('User', backref='authored_comments', lazy=True)
+
+    def __repr__(self):
+        return f'<Comment {self.id}>'
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+@app.route('/')
+def index():
+    recent_posts = BulletinPost.query.order_by(BulletinPost.date_posted.desc()).limit(5).all()
+    return render_template('index.html', recent_posts=recent_posts, current_user=current_user)
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        hashed_password = generate_password_hash(password)
+        existing_user = User.query.filter_by(username=username).first()
+        if existing_user:
+            return "이미 사용 중인 사용자 이름입니다."
+        new_user = User(username=username, password=hashed_password)
+        db.session.add(new_user)
+        db.session.commit()
+        return redirect(url_for('login'))
+    return render_template('register.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        user = User.query.filter_by(username=username).first()
+        if user and check_password_hash(user.password, password):
+            login_user(user)
+            return redirect(url_for('index'))
+        else:
+            return '로그인 실패: 사용자 이름 또는 비밀번호가 올바르지 않습니다.'
+    return render_template('login.html')
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
+
+@app.route('/board')
+@login_required
+def board():
+    posts = Post.query.order_by(Post.date_posted.desc()).all()
+    return render_template('board.html', posts=posts)
+
+@app.route('/post/new', methods=['GET', 'POST'])
+@login_required
+def new_post():
+    if request.method == 'POST':
+        title = request.form['title']
+        content = request.form['content']
+        post = Post(title=title, content=content, author=current_user)
+        db.session.add(post)
+        db.session.commit()
+        return redirect(url_for('board'))
+    return render_template('new_post.html')
+
+@app.route('/post/<int:post_id>')
+def view_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    return render_template('view.html', post=post)
+
+@app.route('/post/edit/<int:post_id>', methods=['GET', 'POST'])
+@login_required
+def edit_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    if post.author != current_user:
+        return '접근 권한이 없습니다.'
+    if request.method == 'POST':
+        post.title = request.form['title']
+        post.content = request.form['content']
+        db.session.commit()
+        return redirect(url_for('view_post', post_id=post.id))
+    return render_template('edit_post.html', post=post)
+
+@app.route('/post/delete/<int:post_id>')
+@login_required
+def delete_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    if post.author != current_user:
+        return '접근 권한이 없습니다.'
+    db.session.delete(post)
+    db.session.commit()
+    return redirect(url_for('board'))
+
+@app.route('/post/<int:post_id>/comment', methods=['POST'])
+@login_required
+def add_comment(post_id):
+    post = Post.query.get_or_404(post_id)
+    content = request.form['content']
+    if content:
+        # 일반 게시글의 댓글은 post_id만 채웁니다.
+        comment = Comment(content=content, post_id=post.id, author=current_user)
+        db.session.add(comment)
+        db.session.commit()
+    return redirect(url_for('view_post', post_id=post_id))
+
+@app.route('/bulletin')
+def bulletin_board():
+    posts = BulletinPost.query.order_by(BulletinPost.date_posted.desc()).all()
+    return render_template('bulletin_board.html', posts=posts)
+
+@app.route('/bulletin/new', methods=['GET', 'POST'])
+@login_required
+def new_bulletin_post():
+    if request.method == 'POST':
+        title = request.form['title']
+        content = request.form['content']
+        post = BulletinPost(title=title, content=content, author=current_user)
+        db.session.add(post)
+        db.session.commit()
+        return redirect(url_for('bulletin_board'))
+    return render_template('new_bulletin_post.html')
+
+@app.route('/bulletin/<int:post_id>')
+def view_bulletin_post(post_id):
+    post = BulletinPost.query.get_or_404(post_id)
+    return render_template('view_bulletin_post.html', post=post)
+
+@app.route('/bulletin/<int:post_id>/comment', methods=['POST'])
+@login_required
+def add_bulletin_comment(post_id):
+    post = BulletinPost.query.get_or_404(post_id)
+    content = request.form['content']
+    if content:
+        # 게시판 게시글의 댓글은 bulletin_post_id만 채웁니다.
+        comment = Comment(content=content, bulletin_post_id=post.id, author=current_user)
+        db.session.add(comment)
+        db.session.commit()
+    return redirect(url_for('view_bulletin_post', post_id=post_id))
+
+@app.route('/building/<int:id>')
+def building_page(id):
+    if not (1 <= id <= 99):
+        return "존재하지 않는 건물입니다.", 404
+    template_name = f'building/B{id:02d}.html'
+    return render_template(template_name)
+
+
+# 애플리케이션 컨텍스트 내에서 데이터베이스 테이블 생성
+with app.app_context():
+    db.create_all()
+
+
+# 애플리케이션 실행
+if __name__ == '__main__':
+    app.run(debug=True)
+    #app.run(host='0.0.0.0', port=8000, debug=True)  # 호스트와 포트를 지정하여 실행할 경우
 ```
 
 ## style.css (수정) 
 ```
+/* 기본 스타일 초기화 */
+body,
+h1,
+h2,
+h3,
+p,
+ul,
+li {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f4f8;
+    color: #003060;
+    line-height: 1.6;
+}
+
+a {
+    color: #004080;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* 헤더 스타일 */
+.main-header {
+    background-color: #004080;
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.user-auth {
+    display: flex;
+    align-items: center;
+}
+
+.user-auth a {
+    margin-left: 20px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    border: 1px solid #004080;
+    background-color: white;
+    color: #004080;
+}
+
+.user-auth a:hover {
+    background-color: #004080;
+    color: white;
+}
+
+.user-auth a.board-link {
+    background-color: #66aaff;
+    border-color: #66aaff;
+    color: white;
+}
+
+.user-auth a.board-link:hover {
+    background-color: #4c90e0;
+} 
+.profile-pic {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    vertical-align: middle;
+    margin-right: 8px;
+    border: 1px solid #eee;
+}
+
+/* 메인 콘텐츠 영역 */
+.main-content-wrapper {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 2000px;
+    margin: 20px auto;
+    gap: 20px;
+}
+
+.left-space {
+    flex: 0 0 25%;
+    padding: 20px;
+    background-color: #ffffff;
+    border: 1px solid #a8c7e7;
+    border-radius: 5px;
+    max-width: 500px;
+}
+
+.middle-space {
+    flex: 1 1 auto;
+    max-width: 1050px;
+    background-color: #ffffff;
+    border: 1px solid #a8c7e7;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.image-slider-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: 4px;
+    width: 100%;
+    max-width: 1000px;
+}
+
+.image-slider {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    width: 100%;
+}
+
+.image-slider img {
+    width: 100%;
+    flex-shrink: 0;
+    height: 300px;
+    object-fit: cover;
+    display: block;
+}
+
+.right-space {
+    flex: 0 0 25%;
+    padding: 40px;
+    background-color: #ffffff;
+    border: 1px solid #a8c7e7;
+    border-radius: 5px;
+    max-width: 200px;
+}
+
+.building-list h2 {
+    color: #004080;
+    border-bottom: 2px solid #a8c7e7;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+.building-list ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.building-list li {
+    padding: 5px 0;
+    border-bottom: 1px solid #d0dbe8;
+}
+
+.building-list li a {
+    color: #004080;
+    font-weight: 600;
+}
+
+/* 슬라이더 네비게이션 버튼 */
+.prev-button,
+.next-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 64, 128, 0.6);
+    border: none;
+    color: white;
+    font-size: 1.5em;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 3px;
+    user-select: none;
+}
+
+.prev-button {
+    left: 10px;
+}
+
+.next-button {
+    right: 10px;
+}
 ```
 
 # AI api를 받아와서 구현하기 
