@@ -3589,7 +3589,8 @@ a:hover {
 
 .user-auth a.board-link:hover {
     background-color: #4c90e0;
-} 
+}
+
 .profile-pic {
     width: 30px;
     height: 30px;
@@ -3611,6 +3612,7 @@ a:hover {
 
 .left-space {
     flex: 0 0 25%;
+    padding-left: 30px;
     padding: 20px;
     background-color: #ffffff;
     border: 1px solid #a8c7e7;
@@ -3705,6 +3707,29 @@ a:hover {
 
 .next-button {
     right: 10px;
+}
+
+.gemini-search-container {
+    width: 100%;
+    max-width: 1050px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.gemini-search-container input[type="text"] {
+    width: 100%;
+    max-width: 1000px;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #a8c7e7;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+#gemini-form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
 }
 ```
 
