@@ -3121,7 +3121,8 @@ body {
 ```
 
 # AI api를 받아와서 구현하기 
-
+https://aistudio.google.com/prompts/new_chat 
+- 여기서 api 키를 발급을 받는다 
 
 
 # 구글 로그인 연동
