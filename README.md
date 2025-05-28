@@ -279,6 +279,12 @@ secret_key = ''.join(secrets.choice(alphabet) for i in range(50)) # 50자리 (�
 print(secret_key)
 ```
 
+- .env 파일 
+```
+# Flask 애플리케이션의 시크릿 키 (세션 관리에 사용)
+SECRET_KEY= 
+```
+
 ## index.html (수정) 
 ```
 <!DOCTYPE html>
@@ -1977,9 +1983,9 @@ body {
         <div class="middle-space">
             <div class="slider-image-slider-container">
                 <div class="slider-image-slider">
-                    <img src="{{ url_for('static', filename='images/school.png') }}" alt="학교 이미지 1">
+                    <img src="{{ url_for('static', filename='images/school.png') }}" alt="학교 지도 그림">
                     <img src="{{ url_for('static', filename='images/map.png') }}" alt="학교 지도 실물">
-                    <img src="{{ url_for('static', filename='images/lib_in.png') }}" alt="부산 도시 이미지">
+                    <img src="{{ url_for('static', filename='images/lib_in.png') }}" alt="도서관 이미지">
                 </div>
                 <button class="slider-prev-button">&lt;</button>
                 <button class="slider-next-button">&gt;</button>
@@ -2102,12 +2108,6 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=True)
-    # google_id 필드는 Google 로그인 전용이므로 제거하거나 nullable=True 유지
-    google_id = db.Column(db.String(120), unique=True, nullable=True)
-    # email 필드는 Google 로그인 외에도 사용될 수 있으므로 유지 (선택 사항)
-    email = db.Column(db.String(120), unique=True, nullable=True)
-    # profile_picture 필드는 Google 로그인 전용이므로 제거하거나 nullable=True 유지
-    profile_picture = db.Column(db.String(255), nullable=True)
     registration_date = db.Column(db.DateTime, default=datetime.utcnow)
     posts = db.relationship('Post', backref='user_posts', lazy=True)
     bulletin_posts = db.relationship('BulletinPost', backref='user_bulletin_posts', lazy=True)
@@ -3124,6 +3124,20 @@ body {
 https://aistudio.google.com/prompts/new_chat 
 - 여기서 api 키를 발급을 받는다 
 
+## app.py (수정) 
+```
+
+```
+
+## index.html (수정) 
+```
+
+```
+
+## style.css (수정) 
+```
+
+```
 
 # 구글 로그인 연동
 
