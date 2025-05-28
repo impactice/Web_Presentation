@@ -78,11 +78,11 @@ myweb/
 │   ├── image_slider.js        # 이미지 슬라이더 JavaScript
 │   ├── login.css              # 로그인 페이지 스타일
 │   ├── new_bulletin_post.css  # 일반 게시글 작성 폼 스타일
-│   ├── new_post.css           # 문의 게시글 작성 폼 스타일 (이전 정보에 있었으나, 제공된 파일에는 없음. 하지만 기존 구조에 따라 추가)
-│   ├── register.css           # 회원가입 페이지 스타일 (이전 정보에 있었으나, 제공된 파일에는 없음. 하지만 기존 구조에 따라 추가)
-│   ├── style.css              # 전역 스타일 (이전 정보에 있었으나, 제공된 파일에는 없음. 하지만 기존 구조에 따라 추가)
-│   ├── view.css               # 게시글 상세 보기 스타일 (이전 정보에 있었으나, 제공된 파일에는 없음. 하지만 기존 구조에 따라 추가)
-│   └── view_bulletin_post.css # 일반 게시글 상세 보기 스타일 (이전 정보에 있었으나, 제공된 파일에는 없음. 하지만 기존 구조에 따라 추가)
+│   ├── new_post.css           # 문의 게시글 작성 폼 스타일 
+│   ├── register.css           # 회원가입 페이지 스타일 
+│   ├── style.css              # 전역 스타일 
+│   ├── view.css               # 게시글 상세 보기 스타일 
+│   └── view_bulletin_post.css # 일반 게시글 상세 보기 스타일 
 └── instance/                  # 데이터베이스 파일
     └── database.db            # SQLite 데이터베이스 파일
 ```
