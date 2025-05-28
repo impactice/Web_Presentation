@@ -1,0 +1,140 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f4f8;
+    color: #003060;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.container h1 {
+    color: #007bff;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.container a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.container a:hover {
+    text-decoration: underline;
+}
+
+.content {
+    min-width: 320px;           /* 최소 가로 너비 */
+    min-height: 280px;          /* 최소 세로 높이 */
+    padding: 20px;              /* 내부 여백 */
+    background-color: #ffffff;  /* 흰색 배경 */
+    border: 1px solid #ddd;     /* 연한 회색 테두리 */
+    border-radius: 5px;         /* 모서리 둥글게 */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* 약한 그림자 */
+    margin: 20px 0;             /* 위아래 마진 */
+}
+
+
+/* 댓글 섹션 */
+.comments-section {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.comments-section h2 {
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+}
+
+.comments-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.comments-section ul li {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 2px 4px;        /* 기존 10px에서 8px로 줄임 */
+    margin-bottom: 8px;       /* 기존 10px에서 8px로 줄임 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    line-height: 1.6;
+    color: #555;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.comments-section ul li strong {
+    color: #007bff;
+    font-weight: bold;
+}
+
+.comments-section ul li small {
+    color: #888;
+    font-size: 0.85em;
+    margin-left: 10px;
+}
+
+.comments-section p {
+    color: #777;
+    text-align: center;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+}
+
+/* 댓글 작성 폼 */
+.comment-form {
+    margin-top: 30px;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.comment-form h3 {
+    font-size: 1.3em;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.comment-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    resize: vertical;
+    min-height: 80px;
+}
+
+.comment-form button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+
+.comment-form button:hover {
+    background-color: #0056b3;
+}
