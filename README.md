@@ -668,7 +668,7 @@ if __name__ == '__main__':
 <head>
     <meta charset="UTF-8">
     <title>새 글 쓰기</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='new_bulletin_board.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='new_bulletin_post.css') }}">
 </head>
 <body>
     <div class="container">
