@@ -4315,6 +4315,7 @@ a:hover {
 
 .left-space {
     flex: 0 0 25%;
+    padding-left: 30px;
     padding: 20px;
     background-color: #ffffff;
     border: 1px solid #a8c7e7;
@@ -4410,5 +4411,42 @@ a:hover {
 .next-button {
     right: 10px;
 }
+
+.gemini-search-container {
+    width: 100%;
+    max-width: 1050px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.gemini-search-container input[type="text"] {
+    width: 100%;
+    max-width: 1000px;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #a8c7e7;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+#gemini-form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
 ```
 
+## .env 파일 형식 
+```
+# Google OAuth 클라이언트 ID (Google Cloud Console에서 발급받은 실제 ID)
+GOOGLE_CLIENT_ID=
+
+# Google OAuth 클라이언트 보안 비밀 (Google Cloud Console에서 발급받은 실제 보안 비밀)
+GOOGLE_CLIENT_SECRET=GOCSPX-
+
+# Google Gemini API 키 (Google AI Studio 또는 Google Cloud Console에서 발급받은 실제 API 키)
+GENAI_API_KEY=AI
+
+# Flask 애플리케이션의 시크릿 키 (세션 관리에 사용)
+SECRET_KEY=
+```
