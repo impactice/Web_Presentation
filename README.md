@@ -2505,6 +2505,468 @@ a:hover {
 }
 ```
 
+## 건물 구현 
+### B01.html 
+- templates 폴더에 building 폴더를 만들고 안에 넣기
+```
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>건물 소개 페이지</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='buildingC/B01.css') }}" />
+</head>
+
+<body>
+    <header class="page-header">
+        <a href="{{ url_for('index') }}" class="logo-link">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="홈으로" class="logo-img" />
+        </a>
+        <h1>1호관 (건물명 1)</h1>
+    </header>
+
+    <div class="content-wrapper">
+        <!-- 좌측 정보 영역: 여러 개 복제 가능하도록 div.container -->
+        <div class="left-info">
+
+            <div class="container Fcontainer">
+                <div class="top-section">
+                    <div class="image-area">
+                        <img src="{{ url_for('static', filename='images/buildingI/B1_1.jpg') }}" alt="1호관 이미지" />
+                    </div>
+                    <div class="summary-area">
+                        <ul>
+                            <li>위치: 중앙 캠퍼스</li>
+                            <li>연면적: 3,000㎡</li>
+                            <li>건축 연도: 2001년</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="description-area">
+                    <p>정말<br>아주<br>멋진<br>1호관<br>건물<br>입니다<br></p>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="top-section">
+                    <div class="image-area">
+                        <img src="{{ url_for('static', filename='images/buildingI/B1_1.jpg') }}" alt="1호관 이미지" />
+                    </div>
+                    <div class="summary-area">
+                        <ul>
+                            <li>위치: 중앙 캠퍼스</li>
+                            <li>연면적: 3,000㎡</li>
+                            <li>건축 연도: 2001년</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="description-area">
+                    <p>1호관은 학교의 주요 행정 시설이 위치해 있으며, 강의실과 연구실로 사용되고 있습니다.</p>
+                </div>
+            </div>
+
+            <!-- 필요하면 container 복제해서 더 추가 가능 -->
+
+        </div>
+
+        <!-- 우측 건물 목록 -->
+        <aside class="right-list">
+            <ul class="building-list">
+                <li><a href="/building/1">1호관 (건물명 1)</a></li>
+                <li><a href="/building/2">2호관 (건물명 2)</a></li>
+                <li><a href="/building/3">3호관 (건물명 3)</a></li>
+                <li><a href="/building/4">4호관 (건물명 4)</a></li>
+                <li><a href="/building/5">5호관 (건물명 5)</a></li>
+                <li><a href="/building/6">6호관 (건물명 6)</a></li>
+                <li><a href="/building/7">7호관 (건물명 7)</a></li>
+                <li><a href="/building/8">8호관 (건물명 8)</a></li>
+                <li><a href="/building/9">9호관 (건물명 9)</a></li>
+                <li><a href="/building/10">10호관(건물명 10)</a></li>
+                <li><a href="/building/11">11호관 (건물명 11)</a></li>
+                <li><a href="/building/12">12호관 (건물명 12)</a></li>
+                <li><a href="/building/13">13호관 (건물명 13)</a></li>
+                <li><a href="/building/14">14호관 (건물명 14)</a></li>
+                <li><a href="/building/15">15호관 (건물명 15)</a></li>
+                <li><a href="/building/16">16호관 (건물명 16)</a></li>
+                <li><a href="/building/17">17호관 (건물명 17)</a></li>
+                <li><a href="/building/18">18호관 (건물명 18)</a></li>
+                <li><a href="/building/19">19호관 (건물명 19)</a></li>
+                <li><a href="/building/20">20호관 (건물명 20)</a></li>
+                <li><a href="/building/21">21호관 (건물명 21)</a></li>
+                <li><a href="/building/22">22호관 (건물명 22)</a></li>
+                <li><a href="/building/23">23호관 (건물명 23)</a></li>
+                <li><a href="/building/24">24호관 (건물명 24)</a></li>
+                <li><a href="/building/25">25호관 (건물명 25)</a></li>
+                <li><a href="/building/26">26호관 (멀티미디어 정보관)</a></li>
+                <li><a href="/building/27">27호관 (중앙도서관)</a></li>
+                <li><a href="/building/28">28호관 (건물명 28)</a></li>
+                <li><a href="/building/29">29호관 (건물명 29)</a></li>
+                <li><a href="/building/30">30호관 (건물명 30)</a></li>
+            </ul>
+        </aside>
+    </div>
+</body>
+
+</html>
+```
+
+### B26.html 
+- templates 폴더에 building 폴더를 만들고 안에 넣기 
+```
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>건물 소개 페이지</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='buildingC/B01.css') }}" />
+</head>
+
+<body>
+    <header class="page-header">
+        <a href="{{ url_for('index') }}" class="logo-link">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="홈으로" class="logo-img" />
+        </a>
+        <h1>26호관 (멀티미디어 정보관)</h1>
+    </header>
+
+    <div class="content-wrapper">
+        <!-- 좌측 정보 영역: 여러 개 복제 가능하도록 div.container -->
+        <div class="left-info">
+
+            <div class="container Fcontainer">
+                <div class="top-section">
+                    <div class="image-area">
+                        <img src="{{ url_for('static', filename='images/buildingI/B26_1.jpg') }}" alt="1호관 이미지" />
+                    </div>
+                    <div class="summary-area">
+                        <ul>
+                            <li>행정건물</li>
+                            <li>학사지원팀</li>
+                            <li>소프트웨어 대여</li>
+                            <li>조류관</li>
+                            <li>미술관</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="description-area">
+                    <p>학교의 여러가지 행정을 관리하는 행정건물입니다<br>
+                        학사지원팀이 위치해 있으며, 학업 소프트웨어 지원, 조류관등 다양한 시설이 있습니다.<br>
+                        건학기념관, 중앙도서관과 함께 학교의 최중요 건물들 중 하나입니다</p>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="top-section">
+                    <div class="image-area">
+                        <img src="{{ url_for('static', filename='images/buildingI/B26_2.jpg') }}" alt="학사지원팀" />
+                    </div>
+                    <div class="summary-area">
+                        <div class="building-name">
+                            <h3>학사지원팀</h3>
+                        </div>
+                        <div class="building-info">
+                            <ul>
+                                <li>위치: 26호관 2층</li>
+                                <li>점심시간 휴게</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="description-area">
+                    <p>경성대 학사지원팀 사무실입니다.<br>
+                        대면상담을 통해 비대면지원보다 상세한 도움을 받을 수 있습니다.</p>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="top-section">
+                    <div class="image-area">
+                        <img src="{{ url_for('static', filename='images/buildingI/B26_3.jpg') }}" alt="26호관 307호" />
+                    </div>
+                    <div class="summary-area">
+                        <div class="building-name">
+                            <h3>네트워크 및 PC서비스실(307호)</h3>
+                        </div>
+                        <div class="building-info">
+                            <ul>
+                                <li>위치: 26호관 3층</li>
+                                <li>소프트웨어 대여</li>
+                                <li>서비스실</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="description-area">
+                    <p>ms 오피스365, 한컴, ADOBI등등 재학생이라면 이곳에서 학업에 필요한 여러 소프트웨어를 대여받을 수 있습니다.<br>.</p>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="top-section">
+                    <div class="image-area">
+                        <img src="{{ url_for('static', filename='images/buildingI/B26_42.jpg') }}" alt="조류관" />
+                    </div>
+                    <div class="summary-area">
+                        <div class="building-name">
+                            <h3>조류관</h3>
+                        </div>
+                        <div class="building-info">
+                            <ul>
+                                <li>위치: 26호관 지하</li>
+                                <li>조류 및 다양한 생물의 모형 전시품</li>
+                                <li>자유관람</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="description-area">
+                    <p>수백여종의 새와 동식물의 모형이 전시된 공간입니다.<br>
+                        26호관의 지하 전시실에 위치하며 관람시관 동안 제약없이 자유롭게 관람 가능합니다.</p>
+                </div>
+            </div>
+
+
+            <div class="container">
+                <div class="top-section">
+                    <div class="image-area">
+                        <img src="{{ url_for('static', filename='images/buildingI/B26_5.jpg') }}" alt="미술관" />
+                    </div>
+                    <div class="summary-area">
+                        <div class="building-name">
+                            <h3>미술관</h3>
+                        </div>
+                        <div class="building-info">
+                            <ul>
+                                <li>위치: 26호관 지하</li>
+                                <li>재학생&졸업생들이 제작한<br>
+                                    다양한 종류의 미술작품 전시</li>
+                                <li>자유관람</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="description-area">
+                    <p>재학생&졸업생들이 제작한 다양한 종류의 미술작품들이 전시된 공간입니다.<br>
+                        26호관의 지하 전시실에 위치하며 관람시관 동안 제약없이 자유롭게 관람 가능합니다.</p>
+                </div>
+            </div>
+
+            <!-- 필요하면 container 복제해서 더 추가 가능 -->
+
+        </div>
+
+        <!-- 우측 건물 목록 -->
+        <aside class="right-list">
+            <ul class="building-list">
+                <li><a href="/building/1">1호관 (한성관)</a></li>
+                <li><a href="/building/2">2호관 (자연관)</a></li>
+                <li><a href="/building/3">3호관 (예술관)</a></li>
+                <li><a href="/building/4">4호관 (상학관)</a></li>
+                <li><a href="/building/5">5호관 (사회관)</a></li>
+                <li><a href="/building/6">6호관 (인문관)</a></li>
+                <li><a href="/building/7">7호관 (제 1공학관)</a></li>
+                <li><a href="/building/8">8호관 (제 2공학관)</a></li>
+                <li><a href="/building/9">9호관 (약*과학관)</a></li>
+                <li><a href="/building/10">10호관 (산학협력관)</a></li>
+                <li><a href="/building/11">11호관 (나이팅게일관)</a></li>
+                <li><a href="/building/12">12호관 (멀티미디어관)</a></li>
+                <li><a href="/building/22">22호관 (문화관)</a></li>
+                <li><a href="/building/23">23호관 (제1 학생회관)</a></li>
+                <li><a href="/building/24">24호관 (제2 학생회관)</a></li>
+                <li><a href="/building/25">25호관 (용무관)</a></li>
+                <li><a href="/building/26">26호관 (멀티미디어정보관)</a></li>
+                <li><a href="/building/27">27호관 (중앙도서관)</a></li>
+                <li><a href="/building/28">28호관 (제1 누리생활관)</a></li>
+                <li><a href="/building/29">29호관 (제2 누리생활관)</a></li>
+                <li><a href="/building/30">30호관 (건학기념관)</a></li>
+            </ul>
+        </aside>
+    </div>
+</body>
+
+</html>
+```
+### B27.html 
+- templates 폴더에 building 폴더를 만들고 안에 넣기
+```
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>건물 소개 페이지</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='buildingC/B01.css') }}" />
+</head>
+
+<body>
+    <header class="page-header">
+        <a href="{{ url_for('index') }}" class="logo-link">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="홈으로" class="logo-img" />
+        </a>
+        <h1>27호관 (중앙도서관)</h1>
+    </header>
+
+    <div class="content-wrapper">
+        <!-- 좌측 정보 영역: 여러 개 복제 가능하도록 div.container -->
+        <div class="left-info">
+
+            <div class="container Fcontainer">
+                <div class="top-section">
+                    <div class="image-area">
+                        <img src="{{ url_for('static', filename='images/buildingI/B27_1.jpg') }}" alt="1호관 이미지" />
+                    </div>
+                    <div class="summary-area">
+                        <ul>
+                            <li>편의&학과건물</li>
+                            <li>도서관</li>
+                            <li>체육관</li>
+                            <li>이디야커피</li>
+                            <li>외부 엘레베이터</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="description-area">
+                    <p>여러가짖 편의시설이 구비된 건물입니다<br>
+                        도서관, 체육관, 이디야커피등 다양한 편의시설의 준비되어있습니다.<br>
+                        평생교육원, 스포츠학과 재학생들이 사용합니다.<br>
+                        건학기념관, 중앙도서관과 함께 학교의 최중요 건물들 중 하나입니다</p>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="top-section">
+                    <div class="image-area">
+                        <img src="{{ url_for('static', filename='images/buildingI/B27_2.jpg') }}" alt="중앙도서관 입구" />
+                    </div>
+                    <div class="summary-area">
+                        <div class="building-name">
+                            <h3>중앙 도서관</h3>
+                        </div>
+                        <div class="building-info">
+                            <ul>
+                                <li>위치: 27호관 5층~8층</li>
+                                <li>학색증 지참</li>
+                                <li>도서 대여</li>
+                                <li>6층 입장</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="description-area">
+                    <p>복층 구조를 가진 경성대학교의 중앙도서관의 메인 시설 입니다.<br>
+                        주 출입구는 6층에 위치하며, 입장시 학생증이 필요합니다.</p>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="top-section">
+                    <div class="image-area">
+                        <img src="{{ url_for('static', filename='images/buildingI/B27_5.jpg') }}" alt="1호관 이미지" />
+                    </div>
+                    <div class="summary-area">
+                        <div class="building-name">
+                            <h3>체육관<h3>
+                        </div>
+                        <div class="building-info">
+                            <ul>
+                                <li>위치: 27호관 6층</li>
+                                <li>편의시설</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="description-area">
+                    <p>27호관에 부속된 실내 체육관입니다.<br>
+                        외부 출입문은 주로 잠겨있기에 6층 메인홀과 연결된 복도의 실내 출입문을 통해서 접근할 수 있습니다.</p>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="top-section">
+                    <div class="image-area">
+                        <img src="{{ url_for('static', filename='images/buildingI/B27_3.jpg') }}" alt="이디야커피" />
+                    </div>
+                    <div class="summary-area">
+                        <div class="building-name">
+                            <h3>이디야커피<h3>
+                        </div>
+                        <div class="building-info">
+                            <ul>
+                                <li>위치: 27호관 6층 메인홀</li>
+                                <li>커피숍</li>
+                                <li>편의시설</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="description-area">
+                    <p>중앙도서관 6층 메인홀에 위치한 이디아커피 가맹점 입니다.<br>
+                        학업에 지친 학생들이 간단한 식음료를 먹으며 휴식을 취할 수 있습니다.</p>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="top-section">
+                    <div class="image-area">
+                        <img src="{{ url_for('static', filename='images/buildingI/B27_4.jpg') }}" alt="외부 엘레베이터" />
+                    </div>
+                    <div class="summary-area">
+                        <div class="building-name">
+                            <h3>외부 엘레베이터</h3>
+                        </div>
+                        <div class="building-info">
+                            <ul>
+                                <li>위치: 경대*부경역 2번 출구 북측 </li>
+                                <li>사용 층고: 1~6층</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="description-area">
+                    <p>경성대*부경대역 2번 출구로 나와 북쪽길을 따라가면 볼 수 있습니다.<br>
+                        중앙도서관 6층 메인홀과 연결되어 있어 경대 캠퍼스 주출입구의 오르막길을 오르지 않고 캠퍼스의 다른 건물에 접근할 수 있습니다.
+                        아침시간엔 사람이 몰리기 때문에 대기줄에 10분가량 소요합니다.</p>
+                </div>
+            </div>
+
+            <!-- 필요하면 container 복제해서 더 추가 가능 -->
+
+        </div>
+
+        <!-- 우측 건물 목록 -->
+        <aside class="right-list">
+            <ul class="building-list">
+                <li><a href="/building/1">1호관 (한성관)</a></li>
+                <li><a href="/building/2">2호관 (자연관)</a></li>
+                <li><a href="/building/3">3호관 (예술관)</a></li>
+                <li><a href="/building/4">4호관 (상학관)</a></li>
+                <li><a href="/building/5">5호관 (사회관)</a></li>
+                <li><a href="/building/6">6호관 (인문관)</a></li>
+                <li><a href="/building/7">7호관 (제 1공학관)</a></li>
+                <li><a href="/building/8">8호관 (제 2공학관)</a></li>
+                <li><a href="/building/9">9호관 (약*과학관)</a></li>
+                <li><a href="/building/10">10호관 (산학협력관)</a></li>
+                <li><a href="/building/11">11호관 (나이팅게일관)</a></li>
+                <li><a href="/building/12">12호관 (멀티미디어관)</a></li>
+                <li><a href="/building/22">22호관 (문화관)</a></li>
+                <li><a href="/building/23">23호관 (제1 학생회관)</a></li>
+                <li><a href="/building/24">24호관 (제2 학생회관)</a></li>
+                <li><a href="/building/25">25호관 (용무관)</a></li>
+                <li><a href="/building/26">26호관 (멀티미디어정보관)</a></li>
+                <li><a href="/building/27">27호관 (중앙도서관)</a></li>
+                <li><a href="/building/28">28호관 (제1 누리생활관)</a></li>
+                <li><a href="/building/29">29호관 (제2 누리생활관)</a></li>
+                <li><a href="/building/30">30호관 (건학기념관)</a></li>
+            </ul>
+        </aside>
+    </div>
+</body>
+
+</html>
+```
+
 # AI api를 받아와서 구현하기 
 
 
