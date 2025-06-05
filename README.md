@@ -2064,7 +2064,7 @@ body {
 </html>
 ```
 
-## app.py (수정)  
+## app.py (수정) - 밑에 있는 걸로 사용하시오  
 ```
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
