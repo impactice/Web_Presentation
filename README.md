@@ -4480,14 +4480,47 @@ SECRET_KEY=
 - app.py 코드 실행 시 마다 db.create_all()을 통해 테이블을 처음부터 생성하고 있는데, 테이블 구조를 바꾸면 기존 데이터베이스를 삭제하고 다시 실행해야 하는 방식이여서 데이터베이스가 변경이 되면 일일이 삭제를 하고 다시 실행해야 했다
     - 여기서 생기는 문제점: 데이터베이스에는 사용자의 정보와 게시글, 댓글등이 저장되어 있는데 서비스 할 때 정보를 삭제하면 문제가 됨
 
-- pip 다운 
+## 문제점을 개선하기 위한 pip 다운 
 ```
 pip install Flask-Migrate
 ```
 
+## app.py 수
+```
+from flask import Flask, render_template
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate  # ✅ 마이그레이션 추가
 
+# 1. Flask 애플리케이션 인스턴스 생성
+app = Flask(__name__, template_folder='templates')
 
+# 2. SQLALCHEMY_DATABASE_URI 설정
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'  # SQLite 데이터베이스 사용
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+# 3. SQLAlchemy 및 Migrate 초기화
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)  # ✅ migrate 객체 생성
+
+# 4. 데이터베이스 모델 정의
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+
+    def __repr__(self):
+        return f'<User {self.username}>'
+
+# 5. 라우트 정의
+@app.route('/')
+def home():
+    users = User.query.all()
+    return render_template('index.html', users=users)
+
+# 6. 앱 실행
+if __name__ == '__main__':
+    app.run(debug=True)
+```
 
 
 
