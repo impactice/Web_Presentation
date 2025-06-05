@@ -4878,7 +4878,7 @@ if __name__ == '__main__':
     #app.run(host='0.0.0.0', port=8000, debug=True)  # 호스트와 포트를 지정하여 실행할 경우
 ```
 
-# 구글 연동 로그인 app.py 수정 
+## 구글 연동 로그인 app.py 수정 
 ```
 import os
 import secrets
