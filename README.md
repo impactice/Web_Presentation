@@ -4634,7 +4634,7 @@ if __name__ == '__main__':
     #app.run(host='0.0.0.0', port=8000, debug=True)  # 호스트와 포트를 지정하여 실행할 경우
 ```
 
-## 게시글과 문의 게시글 app.py 
+## 게시글과 문의 게시글 app.py 수정 
 ```
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
