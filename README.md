@@ -4513,7 +4513,7 @@ class User(db.Model):
 
 # 5. 라우트 정의
 @app.route('/')
-def home():
+def index():
     users = User.query.all()
     return render_template('index.html', users=users)
 
@@ -4522,5 +4522,16 @@ if __name__ == '__main__':
     app.run(debug=True)
 ```
 
+```
+# 1. 의존성 설치
+pip install Flask-Migrate
 
+# 2. 마이그레이션 초기화 (최초 1회만)
+flask db init
 
+# 3. 모델 변경이 있을 때마다 마이그레이션 생성
+flask db migrate -m "Initial migration"  # 또는 "Add email column" 등
+
+# 4. DB에 반영
+flask db upgrade
+```
