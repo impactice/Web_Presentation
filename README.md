@@ -4485,7 +4485,7 @@ SECRET_KEY=
 pip install Flask-Migrate
 ```
 
-## app.py 수정
+## app.py (수정) - 이거는 데이터 베이스 구축할 때 이거를 써야함
 ```
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
