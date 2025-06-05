@@ -4485,11 +4485,11 @@ SECRET_KEY=
 pip install Flask-Migrate
 ```
 
-## app.py 수
+## app.py 수정
 ```
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate  # ✅ 마이그레이션 추가
+from flask_migrate import Migrate  # 마이그레이션 추가
 
 # 1. Flask 애플리케이션 인스턴스 생성
 app = Flask(__name__, template_folder='templates')
@@ -4500,7 +4500,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # 3. SQLAlchemy 및 Migrate 초기화
 db = SQLAlchemy(app)
-migrate = Migrate(app, db)  # ✅ migrate 객체 생성
+migrate = Migrate(app, db)  # migrate 객체 생성
 
 # 4. 데이터베이스 모델 정의
 class User(db.Model):
@@ -4521,7 +4521,7 @@ def index():
 if __name__ == '__main__':
     app.run(debug=True)
 ```
-
+## 순서
 ```
 # 1. 의존성 설치
 pip install Flask-Migrate
@@ -4534,4 +4534,7 @@ flask db migrate -m "Initial migration"  # 또는 "Add email column" 등
 
 # 4. DB에 반영
 flask db upgrade
+
+# 5. 실행
+python app.py
 ```
