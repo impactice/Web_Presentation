@@ -236,7 +236,7 @@ if __name__ == '__main__':
 ```
 
 ##  register.html (추가) 
-- 회원가입 페이
+- 회원가입 페이지   
 ```
 <!DOCTYPE html>
 <html>
