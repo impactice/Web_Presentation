@@ -166,7 +166,297 @@ body {
 }
 
 .logo {
-    font-size: 1오
+    font-size: 1.5em;
+    font-weight: bold;
+```
+# 데이터베이스 구축 
+## app.py 수정 - 코드를 작성하면 자동으로 데이터베이스 구축
+```
+from flask import Flask, render_template # render_template을 import 합니다.
+from flask_sqlalchemy import SQLAlchemy
+
+# 1. Flask 애플리케이션 인스턴스 생성
+app = Flask(__name__, template_folder='templates')
+
+# 2. SQLALCHEMY_DATABASE_URI 설정
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'  # SQLite 데이터베이스 사용
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # 비활성화하여 메모리 오버헤드 줄이기
+
+# 3. SQLAlchemy 인스턴스 초기화
+db = SQLAlchemy(app)
+
+# 4. 데이터베이스 모델 정의
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+
+    def __repr__(self):
+        return f'<User {self.username}>'
+
+# 5. 애플리케이션 컨텍스트 내에서 데이터베이스 테이블 생성
+with app.app_context():
+    db.create_all()
+
+# 6. 기본 경로('/')에 대한 라우트 정의 (이전 코드에서 추가)
+@app.route('/')
+def home():
+    # 여기서 데이터베이스에서 사용자 정보를 가져와 index.html에 전달할 수 있습니다.
+    users = User.query.all() # 모든 User 객체를 가져옴
+    return render_template('index.html', users=users) # templates 폴더의 index.html을 렌더링합니다.
+
+# 7. 애플리케이션 실행
+if __name__ == '__main__':
+    app.run(debug=True)  # 디버깅 모드에서 애플리케이션 실행
+    #app.run(host='0.0.0.0', port=8000, debug=True)  # 호스트와 포트를 지정하여 실행할 경우
+```
+
+# 회원 관리 (로그인 페이지) 
+## login.html(추가) 
+- 로그인 페이지
+```
+<!DOCTYPE html>
+<html>
+<head>
+    <title>로그인</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>로그인</h1>
+    <form method="POST">
+        <label for="username">사용자 이름:</label><br>
+        <input type="text" id="username" name="username" required><br><br>
+        <label for="password">비밀번호:</label><br>
+        <input type="password" id="password" name="password" required><br><br>
+        <input type="submit" value="로그인">
+    </form>
+    <p>아직 계정이 없으신가요? <a href="{{ url_for('register') }}">회원 가입</a></p>
+</body>
+</html>
+```
+
+##  register.html (추가) 
+- 회원가입 페이
+```
+<!DOCTYPE html>
+<html>
+<head>
+    <title>회원 가입</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>회원 가입</h1>
+    <form method="POST">
+        <label for="username">사용자 이름:</label><br>
+        <input type="text" id="username" name="username" required><br><br>
+        <label for="password">비밀번호:</label><br>
+        <input type="password" id="password" name="password" required><br><br>
+        <input type="submit" value="가입">
+    </form>
+    <p>이미 계정이 있으신가요? <a href="{{ url_for('login') }}">로그인</a></p>
+</body>
+</html>
+```
+## .env 파일 만들기 
+### SECRET_KEY 생성하기 
+- 터미널에서 python을 치면 파이썬 터미널이 열리는 데 이 코드 입력하면 랜덤으로 키를 생성해줌 
+```
+import secrets
+import string
+
+# 32바이트(256비트)의 무작위 문자열 생성
+# 기본적으로 URL-safe text를 생성하지만, 더 다양한 문자를 포함할 수도 있습니다.
+# secret_key = secrets.token_urlsafe(32)
+
+# 더 복잡한 키를 위해 대소문자, 숫자, 특수문자를 포함할 수 있습니다.
+alphabet = string.ascii_letters + string.digits + string.punctuation
+secret_key = ''.join(secrets.choice(alphabet) for i in range(50)) # 50자리 (더 길게 해도 됨)
+
+print(secret_key)
+```
+- .env 파일
+```
+# Flask 애플리케이션의 시크릿 키 (세션 관리에 사용)
+SECRET_KEY= 
+```
+## index.html (수정) 
+```
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <title>회원 관리 및 일반 게시판</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="logo">경성대학교 꿀팁!</div>
+        <nav class="user-auth">
+            {% if current_user.is_authenticated %}
+            <span>
+                {% if current_user.profile_picture %}
+                <img src="{{ current_user.profile_picture }}" alt="프로필 사진" class="profile-pic">
+                {% endif %}
+                {{ current_user.username }}님 환영합니다!
+            </span>
+            <a href="{{ url_for('logout') }}">로그아웃</a>
+            {% else %}
+            <a href="{{ url_for('login') }}">로그인</a>
+            <a href="{{ url_for('register') }}">회원 가입</a>
+            {% endif %}
+        </nav>
+    </header>
+
+</body>
+
+</html>
+```
+
+## style.css (수정)
+```
+/* 기본 스타일 초기화 */
+body,
+h1,
+h2,
+h3,
+p,
+ul,
+li {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* --- 전역 텍스트 및 배경 스타일 --- */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f4f8; /* 밝은 회색 배경 */
+    color: #003060;
+    line-height: 1.6;
+}
+
+/* --- 헤더 스타일 (index.html에서 사용) --- */
+.main-header {
+    background-color: #004080; /* 메인 파란색 */
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+/* --- 사용자 인증 내비게이션 링크 스타일 (index.html 헤더) --- */
+.user-auth {
+    display: flex;
+    align-items: center;
+}
+
+.user-auth span {
+    color: white;
+    margin-right: 15px;
+    display: inline-flex; /* 프로필 사진과 텍스트를 한 줄에 정렬 */
+    align-items: center; /* 세로 중앙 정렬 */
+}
+
+.user-auth a {
+    color: white;
+    text-decoration: none;
+    margin-left: 15px;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease; /* 호버 시 부드러운 전환 */
+}
+
+.user-auth a:hover {
+    background-color: rgba(255, 255, 255, 0.2); /* 호버 시 배경색 변경 */
+}
+
+/* --- 프로필 사진 스타일 (index.html에서 사용될 경우) --- */
+.profile-pic {
+    width: 30px; /* 원하는 크기 */
+    height: 30px;
+    border-radius: 50%; /* 원형으로 만듦 */
+    object-fit: cover; /* 이미지가 잘리지 않고 채워지도록 */
+    vertical-align: middle;
+    margin-right: 5px; /* 텍스트와의 간격 */
+}
+
+/* --- 폼 관련 스타일 (login.html, register.html에서 사용) --- */
+form {
+    max-width: 400px; /* 폼의 최대 너비 */
+    margin: 20px auto; /* 중앙 정렬 */
+    padding: 20px;
+    background-color: #ffffff; /* 흰색 배경 */
+    border-radius: 8px; /* 모서리 둥글게 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+}
+
+h1 { /* 폼 페이지의 제목 (회원 가입, 로그인) */
+    text-align: center;
+    color: #004080;
+    margin-bottom: 20px;
+}
+
+label {
+    display: block; /* 라벨을 블록 레벨 요소로 만들어 새 줄에 표시 */
+    margin-bottom: 8px; /* 라벨 아래 여백 */
+    font-weight: bold; /* 글꼴 굵게 */
+    color: #003060;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: calc(100% - 20px); /* 패딩 고려한 너비 (100% - 좌우 패딩) */
+    padding: 10px;
+    margin-bottom: 15px; /* 입력 필드 아래 여백 */
+    border: 1px solid #ccc; /* 테두리 */
+    border-radius: 4px; /* 모서리 둥글게 */
+    font-size: 16px;
+}
+
+/* --- 로그인/회원가입 버튼 스타일 --- */
+input[type="submit"] {
+    background-color: #007bff; /* 파란색 배경 */
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer; /* 마우스 오버 시 커서 변경 */
+    font-size: 18px;
+    width: 100%; /* 부모 요소 너비에 맞춤 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease; /* 호버 시 부드러운 전환 효과 */
+}
+
+input[type="submit"]:hover {
+    background-color: #0056b3; /* 호버 시 약간 더 어두운 파란색 */
+}
+
+/* --- 폼 하단의 링크 스타일 ("이미 계정이 있으신가요?" 등) --- */
+p {
+    text-align: center;
+    margin-top: 20px;
+}
+
+p a {
+    color: #007bff; /* 파란색 링크 */
+    text-decoration: none; /* 밑줄 제거 */
+    font-weight: bold;
+}
+
+p a:hover {
+    text-decoration: underline; /* 호버 시 밑줄 표시 */
+} 
+``` 
+
+## app.py (수정) - 밑에 꺼 사용하삼 
 ```
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
