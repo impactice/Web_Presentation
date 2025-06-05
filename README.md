@@ -170,7 +170,7 @@ body {
     font-weight: bold;
 ```
 # 데이터베이스 구축 
-## app.py 수정 - 코드를 작성하면 자동으로 데이터베이스 구축
+## app.py 수정 - 코드를 작성하면 자동으로 데이터베이스 구축 (밑에 껄로 하시오)
 ```
 from flask import Flask, render_template # render_template을 import 합니다.
 from flask_sqlalchemy import SQLAlchemy
