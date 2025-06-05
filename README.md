@@ -4254,7 +4254,229 @@ a {
     color: #004080;
     text-decoration: none;
 }
-``` 
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* 헤더 스타일 */
+.main-header {
+    background-color: #004080;
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.user-auth {
+    display: flex;
+    align-items: center;
+}
+
+.user-auth a {
+    margin-left: 20px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    border: 1px solid #004080;
+    background-color: white;
+    color: #004080;
+}
+
+.user-auth a:hover {
+    background-color: #004080;
+    color: white;
+}
+
+.user-auth a.board-link {
+    background-color: #66aaff;
+    border-color: #66aaff;
+    color: white;
+}
+
+.user-auth a.board-link:hover {
+    background-color: #4c90e0;
+}
+
+.user-auth .google-login-btn {
+    background-color: #DB4437;
+    border-color: #DB4437;
+    color: white;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.user-auth .google-login-btn:hover {
+    background-color: #c23326;
+    color: white;
+    text-decoration: none;
+}
+
+.profile-pic {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    vertical-align: middle;
+    margin-right: 8px;
+    border: 1px solid #eee;
+}
+
+/* 메인 콘텐츠 영역 */
+.main-content-wrapper {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 2000px;
+    margin: 20px auto;
+    gap: 20px;
+}
+
+.left-space {
+    flex: 0 0 25%;
+    padding-left: 30px;
+    padding: 20px;
+    background-color: #ffffff;
+    border: 1px solid #a8c7e7;
+    border-radius: 5px;
+    max-width: 500px;
+}
+
+.middle-space {
+    flex: 1 1 auto;
+    max-width: 1050px;
+    background-color: #ffffff;
+    border: 1px solid #a8c7e7;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.image-slider-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: 4px;
+    width: 100%;
+    max-width: 1000px;
+}
+
+.image-slider {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    width: 100%;
+}
+
+.image-slider img {
+    width: 100%;
+    flex-shrink: 0;
+    height: 300px;
+    object-fit: cover;
+    display: block;
+}
+
+.right-space {
+    flex: 0 0 25%;
+    padding: 40px;
+    background-color: #ffffff;
+    border: 1px solid #a8c7e7;
+    border-radius: 5px;
+    max-width: 200px;
+}
+
+.building-list h2 {
+    color: #004080;
+    border-bottom: 2px solid #a8c7e7;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+.building-list ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.building-list li {
+    padding: 5px 0;
+    border-bottom: 1px solid #d0dbe8;
+}
+
+.building-list li a {
+    color: #004080;
+    font-weight: 600;
+}
+
+/* 슬라이더 네비게이션 버튼 */
+.prev-button,
+.next-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 64, 128, 0.6);
+    border: none;
+    color: white;
+    font-size: 1.5em;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 3px;
+    user-select: none;
+}
+
+.prev-button {
+    left: 10px;
+}
+
+.next-button {
+    right: 10px;
+}
+
+.gemini-search-container {
+    width: 100%;
+    max-width: 1050px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.gemini-search-container input[type="text"] {
+    width: 100%;
+    max-width: 1000px;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #a8c7e7;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+#gemini-form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+} 
+
+```
+
+## .env 파일 형식
+```
+# Google OAuth 클라이언트 ID (Google Cloud Console에서 발급받은 실제 ID)
+GOOGLE_CLIENT_ID=
+
+# Google OAuth 클라이언트 보안 비밀 (Google Cloud Console에서 발급받은 실제 보안 비밀)
+GOOGLE_CLIENT_SECRET=GOCSPX-
+
+# Google Gemini API 키 (Google AI Studio 또는 Google Cloud Console에서 발급받은 실제 API 키)
+GENAI_API_KEY=AI
+
+# Flask 애플리케이션의 시크릿 키 (세션 관리에 사용)
+SECRET_KEY=
+```
+
 # 발표를 하면서 생긴 문제점 (데이터베이스 인식 문제)
 - app.py 코드 실행 시 마다 db.create_all()을 통해 테이블을 처음부터 생성하고 있는데, 테이블 구조를 바꾸면 기존 데이터베이스를 삭제하고 다시 실행해야 하는 방식이여서 데이터베이스가 변경이 되면 일일이 삭제를 하고 다시 실행해야 했다
     - 여기서 생기는 문제점: 데이터베이스에는 사용자의 정보와 게시글, 댓글등이 저장되어 있는데 서비스 할 때 정보를 삭제하면 문제가 됨
